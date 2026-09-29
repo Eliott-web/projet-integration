@@ -1,0 +1,80 @@
+29/09
+Trouver un client (ou quelqu'un d'extérieur qui joue ce rôle)
+Bien définir le projet (+Epic) - voir wiki
+Mettre en place les outils (tâches, code, temps)
+wiki/github project : backlog (début avec US les plus prioritaires, cf cours de gestion de projet)
+Définir les outils et la façon de travailler en équipe
+Se renseigner et commencer à avancer
+Wiki : 2 Projet (A Description)
+Wiki : 3 Backlog (commencer !)
+wiki : 4. Intégration
+
+06/10
+    Préparer la démo
+    wiki : 1. Client
+    wiki : 2. Projet (tout)
+    wiki : 3 Backlog
+    wiki : 6. Technologiques
+    wiki : 5. daily scrum 1
+
+13/10
+    wiki : 7. Méthodologie et outils
+    wiki : 17. ressources
+    wiki : 5. review 1
+    wiki : 5. retrospective 1 + fichier résumé des activités
+    wiki : 5. planning 2
+    S'assurer que les outils sont bien utilisés (tâches, code, temps)
+    wiki : 19. indiquer les US individuelles de chacun
+
+20/10
+    wiki : 8. architecture et schémas
+    wiki : 5. daily scrum 2
+    Warning : 24h lln mercredi et jeudi
+    mardi 03 novembre 	Coaching 3	Coaching sur les projets	wiki : 19. Vidéos US individuelles  (démo + US backlog + gestionnaires tâche, code, temps + test + explication technique du fonctionnement)
+	wiki : 5. review 2
+	wiki : 5. retrospective 2  + fichier résumé des activités
+	wiki : 5. planning 3
+	wiki : 11. hébergement
+
+mardi 10 novembre
+    Sprint Review + Retrospective 3	Démos  (review 3)
+    wiki : 9. testing (partie 1)
+	SprintPanning  4	Sprint retrospective 3	wiki : 11. déploiement
+	Sprint Planning 4	wiki : 5. daily scrum 3
+	Vérifications objectifs + wiki	wiki : 5. daily scrum 3
+
+mardi 17 novembre
+    Coaching 4	Vérifications objectifs + wiki
+    wiki : 10. sécurité (partie 1)
+	Coaching sur les projets	wiki : 12 devops - outils (partie1)
+	wiki : 5. review 3
+	wiki : 5. retrospective 3  + fichier résumé des activités
+	wiki : 5. planning 4
+
+mardi 24 novembre
+    Sprint Review + Retrospective 4	Démos  (review 4)	wiki : 12 devops - outils
+    SprintPanning  5	Sprint retrospective 4	wiki : 14. RSE
+    Sprint Planning 5	wiki : 5. daily scrum 4
+    Vérifications objectifs + wiki
+
+mardi 01 décembre
+    Coaching  5	Vérifications objectifs + wiki	wiki : 11. tests (suite)
+	Coaching sur les projets
+	wiki : 13. GDPR
+	wiki : 14. RSE
+	wiki : 5. review 4
+	wiki : 5. retrospective 4  + fichier résumé des activités
+	wiki : 5. planning 5
+
+mardi 08 décembre
+ 	Sprint Review + Retrospective 5	Démos  (review 5)	wiki : 15. A mettre en avant
+	Dernière vérifications et évaluations	wiki : 11. sécurité (suite)
+	wiki : 12 devops - outils (suite)
+	wiki : 5. daily scrum 5
+
+mardi 15 décembre 	DEFENSE FINALE
+	wiki : 20. vidéos et screenshots du projet
+			présentation orale du projet en commun
+			wiki : 18. analyses personnelle avec formulaire
+			wiki : 16. Manuel d'installation
+			wiki : tout compléter

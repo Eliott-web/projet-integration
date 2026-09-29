@@ -1,0 +1,26 @@
+dashboard
+    - page web
+    - db supabase
+
+
+robot haut-parleur
+    reprend les info depuis le dashborad par commande vocale
+
+sécurisation
+
+monitoring co2
+
+bonus:
+blackjack
+
+
+taches:
+    - Justin (scrum master sprint 1)
+    - Rayan
+    - Eliott
+    - Gaylord
+    - Grace
+    - William
+
+méthode:
+scrum
