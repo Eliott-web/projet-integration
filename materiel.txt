@@ -1,23 +1,11 @@
-capteur humidité sol et air
-*capteur DHT11*
-*LM393*
-
-capteur thermique
-
-servomoteur puissant 12G ? x 4
-
-détecteur lumière
-
-Raspberry pi
-
-10 boutons 
-
-résistance
-cables
-chargeur + cable pour Raspberry
-
-pompe a eau x 4
-
+*capteur DHT11* -> humidité et Température
+*LM393* pourquoi du son ???
+servomoteur puissant (12G si possible) x 4
+détecteur lumière -> photorésistance
+Raspberry pi (de préference) avec chargeur + cable pour Raspberry pi
 petit ventilo
-
-tonal buzzer
+boutons x 10
+pompe a eau (x 1) on en a besoin que d'une
+buzzer
+lot de résistance -> après les ébauches de circuit
+cables dupont (ou équivalent)

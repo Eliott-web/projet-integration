@@ -1,0 +1,30 @@
+US et Epic
+Epic 1 : Données de la serre
+En tant qu'utilisateur, je veux pouvoir voir la température et l’humidité de la serre 
+En tant qu’utilisateur, je veux pouvoir voir si des fenêtres sont ouverte
+En tant qu’utilisateur, je veux pouvoir voir la consommation moyenne d’eau de la serre
+Epic 2 : données exterieur
+En tant qu’utilisateur, je veux pouvoir voir le levé du soleil et le coucher du soleil
+En tant qu’utilisateur, je veux pouvoir voir la température extérieur pour savoir si l’on peut ouvrir les fenêtre ou pas
+Epic 3 : Taches automatique
+En tant qu'utilisateur, j'ai besoin d'un capteur de luminosité pour déclencher automatiquement un éclairage d'appoint pour les plantes.
+En tant qu'utilisateur, j'ai besoin d'arroser automatiquement les plantes si je reçois une alerte.
+En tant qu'utilisateur, j'ai besoin d’ouvrir automatiquement les fenêtres si je reçois une alerte et qu’il fait moins froid dehors.
+Epic 4 : Dashboard, site et appareil
+En tant qu’utilisateur, je veux pouvoir voir si il y a besoin d’arroser mes plante (automatique ou manuel)
+En tant qu'utilisateur, je veux pouvoir voir la dernière fois que mes plante on été arrosé
+En tant qu’utilisateur, je veux pouvoir voir la quand je dois ouvrir les fenêtres
+En tant qu’utilisateur, je veux pouvoir voir un schéma récapitulatif des données (température, humidité, consommation moyenne de l’eau,...)
+En tant qu’utilisateur, j’ai besoin de voir l’état des capteurs en temps réel sur l’écran.
+Epic 5 : Alerte
+En tant qu'utilisateur, j'ai besoin d'un signal sonore en cas d'alerte critique (niveau de température trop élevé, etc..)
+En tant qu'utilisateur, j’ai besoin d’être alerté sur l’écran si le système détecte une anomalie.
+Epic 6 : appareil dashboard
+En tant qu’utilisateur, j’ai besoin d’avoir les mêmes infos que sur le dashboard
+En tant qu’utilisateur, j’ai besoin de bouton pour naviguer sur le dashboard  
+En tant qu’utilisateur, j'ai besoin d’avoir un bouton physique pour activer l’arrosage manuellement en cas de problème.
+En tant qu’utilisateur, j’ai besoin d’avoir un bouton physique pour éteindre et allumer l'écran.
+En tant qu'utilisateur, j'ai besoin d'un bouton de réinitialisation physique pour redémarrer le système électronique en cas de bug.
+En tant qu'utilisateur, j'ai besoin d'un bouton physique pour ouvrir ou fermer manuellement le système d'aération/fenêtre.
+Epic 7 : autres
+En tant qu’utilisateur, je voudrais pouvoir jouer au blackjack
