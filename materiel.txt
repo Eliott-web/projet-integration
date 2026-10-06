@@ -1,0 +1,15 @@
+capteur humidité sol et air
+
+capteur thermique
+
+servomoteur puissant
+
+détecteur lumière
+
+Raspberry pi
+
+10 boutons 
+
+résistance
+cables
+chargeur + cable pour Raspberry
