@@ -1,8 +1,10 @@
 capteur humidité sol et air
+*capteur DHT11*
+*LM393*
 
 capteur thermique
 
-servomoteur puissant
+servomoteur puissant 12G ? x 4
 
 détecteur lumière
 
@@ -13,3 +15,9 @@ Raspberry pi
 résistance
 cables
 chargeur + cable pour Raspberry
+
+pompe a eau x 4
+
+petit ventilo
+
+tonal buzzer
