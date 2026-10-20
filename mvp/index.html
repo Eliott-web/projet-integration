@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>GreenHouse — Dashboard</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-icon">✳</span>
+                <span>Green<span class="accent">House</span><small>SMART GREENHOUSE</small></span>
+            </div>
+            <div class="side-label">ESPACE DE TRAVAIL</div>
+            <nav id="nav"></nav>
+            <div class="side-bottom">
+                <span class="online-dot"></span> Serre connectée
+                <small>Données de démonstration</small>
+            </div>
+        </aside>
+        <div class="main">
+            <header>
+                <button id="menuBtn" class="mobile-menu">☰</button>
+                <div class="breadcrumb">Tableau de bord <span>/</span> <strong id="crumb">Accueil</strong></div>
+                <div class="header-right">
+                    <span class="live">
+                        <span class="online-dot"></span> Simulation active
+                    </span>
+                    <button class="icon-btn" id="notifBtn" title="Notifications">♧<span class="notif-dot"></span></button>
+                    <div class="avatar">GH</div>
+                </div>
+            </header>
+            <main id="app"></main>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+        <script src="app.js"></script>
+    </body>
+</html>
