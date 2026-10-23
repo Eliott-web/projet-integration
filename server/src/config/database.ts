@@ -1,27 +1,13 @@
 import { Sequelize } from 'sequelize';
 
-class Database {
-    private static instance: Sequelize;
+const sequelize = new Sequelize({
+    dialect: 'postgres',
+    host: process.env.DB_HOST ?? 'localhost',
+    port: Number(process.env.DB_PORT ?? 5432),
+    database: process.env.DB_NAME ?? 'projet_integration',
+    username: process.env.DB_USER ?? 'postgres',
+    password: process.env.DB_PASSWORD ?? '',
+    logging: false,
+});
 
-    private constructor() { }
-
-    public static getInstance(): Sequelize {
-        if (!Database.instance) {
-            Database.instance = new Sequelize(
-                'projet_integration',
-                'postgres',
-                'X3IRAYHAMIDE2006@',
-                {
-                    host: 'localhost',
-                    dialect: 'postgres',
-                    logging: false,
-                }
-            );
-        }
-
-        return Database.instance;
-    }
-}
-
-const sequelize = Database.getInstance();
 export default sequelize;
