@@ -7,13 +7,12 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(servoPIN, GPIO.OUT)
 
 p = GPIO.PWM(servoPIN, 50) # 50Hz -> 20ms
-p.start(5) # on met le moteur a 90°
 
 def open():
-  p.ChangeDutyCycle(12.5)
+  p.ChangeDutyCycle(angle_to_percent(180))
 
 def close():
-  p.ChangeDutyCycle(7.5)
+  p.ChangeDutyCycle(angle_to_percent(100))
 
 # MQTT
 BROKER = "localhost"
@@ -46,6 +45,19 @@ mqttc.on_connect = on_connect
 mqttc.on_message = on_message
 
 # code
+def angle_to_percent (angle) :
+  if angle > 180 or angle < 0 :
+    return False
+
+  start = 2.5
+  end = 12.5
+  ratio = (end - start)/180 #Calcul ratio from angle to percent
+
+  angle_as_percent = angle * ratio
+
+  return start + angle_as_percent
+
+p.start(angle_to_percent(45))
 try:
   print("connection au broker")
   mqttc.connect(BROKER, PORT, 60)
