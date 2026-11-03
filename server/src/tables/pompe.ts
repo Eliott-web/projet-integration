@@ -3,13 +3,13 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config/database';
 
-class Pompes extends Model {
+class Pompe extends Model {
     declare IdPompe: number;
     declare IdSerre: number;
     declare IdStock: number;
 }
 
-Pompes.init({
+Pompe.init({
     IdPompe: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -24,4 +24,4 @@ Pompes.init({
     timestamps: false,
 });
 
-export default Pompes;
+export default Pompe;
