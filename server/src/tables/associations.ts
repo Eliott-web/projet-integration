@@ -11,6 +11,8 @@ import SerrePlante from './serre_plante';
 import SerreHumidite from './serre_humidite';
 import SerreTemperature from './serre_temperature';
 
+
+import Pompe from './pompe';
 import StockEau from './stock_eau';
 import Renouvellement from './renouvellement';
 
@@ -156,4 +158,14 @@ StockEau.hasMany(Renouvellement, {
 Renouvellement.belongsTo(StockEau, {
     foreignKey: 'idNouveauStock',
     as: 'stockSuivant'
+});
+
+Serre.hasMany(Pompe, {
+    foreignKey: 'IdSerre',
+    as: 'pompes'
+});
+
+Pompe.belongsTo(Serre, {
+    foreignKey: 'IdSerre',
+    as: 'serre'
 });
