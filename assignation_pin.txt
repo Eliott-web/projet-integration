@@ -1,1 +1,5 @@
-pin 17 = activation pompe
+RASPBERRY ZERO W
+
+gpio 17 = sens pompe
+gpio 18 = allumer/éteindre pompe
+gpio 27 = bouton
