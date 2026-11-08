@@ -1,5 +1,5 @@
 RASPBERRY ZERO W
 
-gpio 17 = sens pompe
-gpio 18 = allumer/éteindre pompe
-gpio 27 = bouton
+gpio 17 = direction pompe
+gpio 18 = enable pompe
+gpio 27 = bouton physique pompe
