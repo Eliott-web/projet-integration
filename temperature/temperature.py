@@ -59,3 +59,4 @@ try:
 except KeyboardInterrupt:
     mqttc.disconnect()
     GPIO.cleanup()
+    GPIO.cleanup()
