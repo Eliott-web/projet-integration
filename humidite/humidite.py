@@ -1,7 +1,7 @@
 import time
 
-import RPi.GPIO as GPIO
-import dht11
+import adafruit_dht
+import board
 import paho.mqtt.client as mqtt
 
 BROKER = "localhost"
@@ -15,28 +15,26 @@ def on_connect(client, userdata, flags, reason_code, properties):
     print(f"Connecté au broker MQTT (code {reason_code})")
 
 
+dht_device = adafruit_dht.DHT11(board.D4)
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 mqttc.username_pw_set(USERNAME, PASSWORD)
 mqttc.on_connect = on_connect
 
 try:
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-    capteur = dht11.DHT11(pin=4)
-
     print("Connexion au broker MQTT")
     mqttc.connect(BROKER, PORT, 60)
     mqttc.loop_start()
 
     while True:
-        resultat = capteur.read()
+        try:
+            humidite = dht_device.humidity
+            if humidite is not None:
+                mqttc.publish(TOPIC, f"{humidite:.1f}", qos=1)
+                print(f"Humidité publiée : {humidite:.1f} %")
+        except RuntimeError:
+            pass
 
-        if resultat.is_valid():
-            humidite = resultat.humidity
-            mqttc.publish(TOPIC, f"{humidite:.1f}", qos=1)
-            print(f"Humidité publiée : {humidite:.1f} %")
-
-        time.sleep(2)
+        time.sleep(3)
 
 except KeyboardInterrupt:
     print("\nProgramme arrêté.")
@@ -44,4 +42,4 @@ except KeyboardInterrupt:
 finally:
     mqttc.loop_stop()
     mqttc.disconnect()
-    GPIO.cleanup()
+    dht_device.exit()
