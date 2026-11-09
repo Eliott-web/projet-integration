@@ -1,8 +1,8 @@
 from gpiozero import OutputDevice
 from time import sleep
 
-gpio_dir = OutputDevice(17)  # direction
-gpio_en = OutputDevice(18)   # enable (marche/arrêt)
+gpio_dir = OutputDevice(22)  # direction
+gpio_en = OutputDevice(23)   # enable (marche/arrêt)
 
 temps_mort = 0.5        # temps mort (s) avant de changer de sens
 
