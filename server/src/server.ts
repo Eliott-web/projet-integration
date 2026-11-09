@@ -37,18 +37,14 @@ async function startServer() {
 
         console.log('Connexion PostgreSQL réussie');
 
-        await sequelize.sync({ alter: true });
-
-        console.log('Base de données PostgreSQL synchronisée');
-
         app.listen(port, () => {
             console.log(`Serveur lancé sur : http://localhost:${port}`);
-    });
+        });
 
-} catch (error) {
-    console.error('Erreur PostgreSQL :', error);
-    process.exit(1);
-}
+    } catch (error) {
+        console.error('Erreur PostgreSQL :', error);
+        process.exit(1);
+    }
 }
 
 startServer();

@@ -16,6 +16,7 @@ import Pompe from './pompe';
 import StockEau from './stock_eau';
 import Renouvellement from './renouvellement';
 
+
 // ==========================================
 // ASSOCIATIONS CAPTEURS
 // ==========================================
@@ -168,4 +169,15 @@ Serre.hasMany(Pompe, {
 Pompe.belongsTo(Serre, {
     foreignKey: 'IdSerre',
     as: 'serre'
+});
+
+// Relation entre StockEau et Pompe
+StockEau.hasMany(Pompe, {
+    foreignKey: 'IdStock',
+    as: 'pompes'
+});
+
+Pompe.belongsTo(StockEau, {
+    foreignKey: 'IdStock',
+    as: 'stockEau'
 });
