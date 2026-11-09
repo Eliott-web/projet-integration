@@ -46,9 +46,6 @@ mqttc.on_message = on_message
 
 # code
 def angle_to_percent (angle) :
-  if angle > 180 or angle < 0 :
-    return False
-
   start = 2.5
   end = 12.5
   ratio = (end - start)/180 #Calcul ratio from angle to percent
@@ -57,7 +54,7 @@ def angle_to_percent (angle) :
 
   return start + angle_as_percent
 
-p.start(angle_to_percent(45))
+p.start(angle_to_percent(100))
 try:
   print("connection au broker")
   mqttc.connect(BROKER, PORT, 60)
