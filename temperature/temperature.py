@@ -33,13 +33,10 @@ def read_temperature():
 
 
     try:
-        while True:
-            resultat = capteur.read()
+        resultat = capteur.read()
 
-            if resultat.is_valid():
-                print(f"Température : {resultat.temperature:.1f} °C")
-
-            time.sleep(2)
+        if resultat.is_valid():
+            print(f"Température : {resultat.temperature:.1f} °C")
 
     except KeyboardInterrupt:
         print("\nProgramme arrêté.")
