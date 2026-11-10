@@ -1,13 +1,220 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import style from "temperature.module.css";
+import { useEffect, useState } from "react";
+import style from "./temperature.module.css";
+
+type TemperatureReading = {
+    value: number;
+    receivedAt: string;
+};
+
+type ConnectionState = "loading" | "online" | "waiting" | "offline";
+
+const apiBaseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+
+function formatTime(value: string): string {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "Heure inconnue";
+
+    return new Intl.DateTimeFormat("fr-BE", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    }).format(date);
+}
 
 function Temperature() {
+    const [reading, setReading] = useState<TemperatureReading | null>(null);
+    const [history, setHistory] = useState<TemperatureReading[]>([]);
+    const [connection, setConnection] = useState<ConnectionState>("loading");
+    const [refreshKey, setRefreshKey] = useState(0);
+
+    useEffect(() => {
+        let active = true;
+
+        const fetchReading = async () => {
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/temperature`, {
+                    headers: { Accept: "application/json" },
+                });
+
+                if (response.status === 503) {
+                    if (active) setConnection("waiting");
+                    return;
+                }
+                if (!response.ok) throw new Error("Réponse du serveur invalide");
+
+                const payload: unknown = await response.json();
+                if (typeof payload !== "object" || payload === null) {
+                    throw new Error("Mesure invalide");
+                }
+
+                const value = (payload as { value?: unknown }).value;
+                const receivedAt = (payload as { receivedAt?: unknown }).receivedAt;
+                if (
+                    typeof value !== "number" ||
+                    !Number.isFinite(value) ||
+                    value < 0 ||
+                    value > 50 ||
+                    typeof receivedAt !== "string" ||
+                    Number.isNaN(new Date(receivedAt).getTime())
+                ) {
+                    throw new Error("Mesure invalide");
+                }
+
+                if (!active) return;
+
+                const nextReading = { value, receivedAt };
+                setReading(nextReading);
+                setConnection("online");
+                setHistory((previous) => {
+                    if (previous.at(-1)?.receivedAt === receivedAt) return previous;
+                    return [...previous, nextReading].slice(-12);
+                });
+            } catch {
+                if (active) setConnection("offline");
+            }
+        };
+
+        void fetchReading();
+        const intervalId = window.setInterval(() => void fetchReading(), 5000);
+
+        return () => {
+            active = false;
+            window.clearInterval(intervalId);
+        };
+    }, [refreshKey]);
+
+    const connectionLabel: Record<ConnectionState, string> = {
+        loading: "Connexion au serveur",
+        online: "Flux actif",
+        waiting: "En attente d’une mesure",
+        offline: "Serveur indisponible",
+    };
 
     return (
-        <div className={style.temperature}>
-            <h1>Temperature Page</h1>
-            <p>This is the temperature page content.</p>
+        <div className={style.page}>
+            <div className={style.shell}>
+                <header className={style.topbar}>
+                    <a className={style.brand} href="/" aria-label="Serre, accueil">
+                        <span className={style.brandMark}>S</span>
+                        <span>Serre<span className={style.brandDetail}> / MONITORING</span></span>
+                    </a>
+                    <nav className={style.navigation} aria-label="Pages de mesure">
+                        <a className={style.navLink} href="/">Humidité</a>
+                        <a className={`${style.navLink} ${style.activeLink}`} href="/temperature" aria-current="page">Température</a>
+                    </nav>
+                    <div className={style.connectionStatus} aria-live="polite">
+                        <span
+                            className={`${style.statusDot} ${connection === "online"
+                                    ? style.isOnline
+                                    : connection === "waiting"
+                                        ? style.isWaiting
+                                        : style.isOffline
+                                }`}
+                        />
+                        {connectionLabel[connection]}
+                    </div>
+                </header>
+
+                <main>
+                    <section className={style.headingRow}>
+                        <div>
+                            <p className={style.eyebrow}>ZONE DE CULTURE / CAPTEUR 02</p>
+                            <h1>Température</h1>
+                            <p className={style.subtitle}>Suivi de la température de la serre</p>
+                        </div>
+                        <button
+                            className={style.refreshButton}
+                            type="button"
+                            onClick={() => setRefreshKey((key) => key + 1)}
+                        >
+                            Actualiser
+                        </button>
+                    </section>
+
+                    <section className={style.readingGrid} aria-label="Mesure actuelle">
+                        <div className={style.currentReading}>
+                            <div className={style.readingTopline}>
+                                <span>TEMPÉRATURE DE LA SERRE</span>
+                                <span className={style.liveLabel}>
+                                    <span />
+                                    {connection === "online" ? "LIVE" : "MESURE"}
+                                </span>
+                            </div>
+                            <div className={style.metric} aria-live="polite">
+                                {reading ? reading.value.toLocaleString("fr-BE", { maximumFractionDigits: 1 }) : "--"}
+                                <span>°C</span>
+                            </div>
+                            <div
+                                className={style.meter}
+                                role="progressbar"
+                                aria-label="Température"
+                                aria-valuemin={0}
+                                aria-valuemax={50}
+                                aria-valuenow={reading?.value}
+                            >
+                                <span style={{ width: reading ? `${(reading.value / 50) * 100}%` : "0%" }} />
+                            </div>
+                            <div className={style.scale}>
+                                <span>0 °C</span>
+                                <span>50 °C</span>
+                            </div>
+                            <p className={style.receivedAt}>
+                                {reading ? `Reçue à ${formatTime(reading.receivedAt)}` : "Aucune mesure disponible"}
+                            </p>
+                        </div>
+
+                        <div className={style.statusPanel}>
+                            <p className={style.panelEyebrow}>ÉTAT DU CAPTEUR</p>
+                            <p className={style.sensorState}>{connectionLabel[connection]}</p>
+                            <div className={style.statusDivider} />
+                            <p className={style.panelEyebrow}>DERNIÈRE MESURE</p>
+                            <p className={style.lastReading}>{reading ? formatTime(reading.receivedAt) : "—"}</p>
+                            {connection === "offline" && (
+                                <p className={style.errorMessage}>Vérifie que le backend répond sur son adresse configurée.</p>
+                            )}
+                            {connection === "waiting" && (
+                                <p className={style.errorMessage}>Le serveur attend une température sur le topic MQTT configuré.</p>
+                            )}
+                        </div>
+                    </section>
+
+                    <section className={style.historySection}>
+                        <div className={style.historyHeading}>
+                            <div>
+                                <p className={style.eyebrow}>MESURES REÇUES</p>
+                                <h2>Tendance récente</h2>
+                            </div>
+                            <span className={style.historyCount}>{history.length} / 12</span>
+                        </div>
+
+                        {history.length > 0 ? (
+                            <ol className={style.chart} aria-label="Historique des mesures reçues depuis l’ouverture de la page">
+                                {history.map((item, index) => (
+                                    <li className={style.barColumn} key={`${item.receivedAt}-${index}`}>
+                                        <span className={style.barValue}>{item.value.toLocaleString("fr-BE", { maximumFractionDigits: 1 })}°</span>
+                                        <span
+                                            className={`${style.bar} ${index === history.length - 1 ? style.latestBar : ""}`}
+                                            style={{ height: `${Math.max((item.value / 50) * 100, 4)}%` }}
+                                            title={`${item.value} °C à ${formatTime(item.receivedAt)}`}
+                                        />
+                                        <time className={style.barTime} dateTime={item.receivedAt}>{formatTime(item.receivedAt)}</time>
+                                    </li>
+                                ))}
+                            </ol>
+                        ) : (
+                            <div className={style.emptyHistory}>
+                                <span className={style.emptyMark}>°</span>
+                                <p>Les mesures apparaîtront ici dès leur réception.</p>
+                            </div>
+                        )}
+                    </section>
+                </main>
+
+                <footer className={style.footer}>
+                    <span>SERRE / CAPTEUR 02</span>
+                    <span>Actualisation toutes les 5 secondes</span>
+                </footer>
+            </div>
         </div>
     );
 }
