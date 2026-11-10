@@ -3,7 +3,6 @@ from time import sleep
 
 gpio_dir = OutputDevice(22)  # direction
 gpio_en = OutputDevice(23)   # enable (marche/arrêt)
-
 temps_mort = 0.5        # temps mort (s) avant de changer de sens
 
 def arreter(): # stoppe la pompe
