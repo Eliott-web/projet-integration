@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
 import humidite.humidite as humidite
 
-#moteur
+#moteurg
 servoPIN = 18
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(servoPIN, GPIO.OUT)
