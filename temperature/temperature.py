@@ -2,7 +2,6 @@ import adafruit_dht
 import board
 import paho.mqtt.client as mqtt
 
-TOPIC = "projet/serre/temperature"
 
 dht_device = adafruit_dht.DHT11(board.D4)
 
