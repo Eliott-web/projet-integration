@@ -167,6 +167,10 @@ export function getLastWindowCommand(): WindowCommand | null {
   return lastWindowCommand;
 }
 
+export function isMqttConnected(): boolean {
+  return mqttReady;
+}
+
 export function stopMqtt(): void {
   mqttReady = false;
   rejectPendingReadings(new Error("Le backend MQTT s'arrête."));

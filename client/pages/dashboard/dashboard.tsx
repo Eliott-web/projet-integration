@@ -9,8 +9,9 @@ type SensorReading = {
 };
 
 type SensorState = "loading" | "online" | "waiting" | "offline" | "unavailable";
+type WindowCommand = "open" | "close";
 
-const apiBaseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+const apiBaseUrl = import.meta.env.VITE_API_URL ?? `http://${window.location.hostname}:3000`;
 
 async function fetchSensorReading(
     endpoint: string,
@@ -64,6 +65,9 @@ function Dashboard() {
     const [humidityState, setHumidityState] = useState<SensorState>("loading");
     const [temperature, setTemperature] = useState<SensorReading | null>(null);
     const [temperatureState, setTemperatureState] = useState<SensorState>("loading");
+    const [windowCommand, setWindowCommand] = useState<WindowCommand>("close");
+    const [brokerConnected, setBrokerConnected] = useState(false);
+    const [currentTime, setCurrentTime] = useState(() => new Date());
 
     useEffect(() => {
         let active = true;
@@ -81,13 +85,61 @@ function Dashboard() {
             setTemperatureState(temperatureResult.state);
         };
 
+        const refreshWindowCommand = async () => {
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/fenetre`, {
+                    headers: { Accept: "application/json" },
+                });
+                if (!response.ok) {
+                    if (active) setBrokerConnected(false);
+                    return;
+                }
+
+                const payload: unknown = await response.json();
+                if (
+                    typeof payload !== "object" ||
+                    payload === null ||
+                    !("lastCommand" in payload) ||
+                    !("brokerConnected" in payload) ||
+                    typeof payload.brokerConnected !== "boolean"
+                ) {
+                    if (active) setBrokerConnected(false);
+                    return;
+                }
+                if (active) setBrokerConnected(payload.brokerConnected);
+
+                const lastCommand = payload.lastCommand;
+                if (lastCommand === null) {
+                    if (active) setWindowCommand("close");
+                } else if (
+                    typeof lastCommand === "object" &&
+                    lastCommand !== null &&
+                    "command" in lastCommand &&
+                    (lastCommand.command === "open" || lastCommand.command === "close")
+                ) {
+                    if (active) setWindowCommand(lastCommand.command);
+                }
+            } catch (error) {
+                console.error("Impossible de récupérer la dernière commande de la fenêtre :", error);
+                if (active) setBrokerConnected(false);
+            }
+        };
+
         void refreshReadings();
+        void refreshWindowCommand();
         const intervalId = window.setInterval(() => void refreshReadings(), 5000);
+        const windowIntervalId = window.setInterval(() => void refreshWindowCommand(), 5000);
 
         return () => {
             active = false;
             window.clearInterval(intervalId);
+            window.clearInterval(windowIntervalId);
         };
+    }, []);
+
+    useEffect(() => {
+        const clockIntervalId = window.setInterval(() => setCurrentTime(new Date()), 1000);
+        return () => window.clearInterval(clockIntervalId);
     }, []);
 
     const sensorStatus: Record<SensorState, string> = {
@@ -111,6 +163,14 @@ function Dashboard() {
         <div className={style.page}>
             <div className={style.shell}>
                 <Header />
+                <div className={style.clock}>
+                    <time dateTime={currentTime.toISOString()}>
+                        {new Intl.DateTimeFormat("fr-BE", {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        }).format(currentTime)}
+                    </time>
+                </div>
 
                 <main>
                     <section className={style.heading}>
@@ -203,11 +263,18 @@ function Dashboard() {
                         <article className={style.summaryCard}>
                             <div className={style.cardHeader}>
                                 <span className={style.iconWindow} aria-hidden="true">↗</span>
-                                <span className={`${style.statusPill} ${style.pillUnavailable}`}>NON CONNECTÉE</span>
+                                <span className={`${style.statusPill} ${brokerConnected ? style.pillOnline : style.pillOffline}`}>
+                                    BROKER MQTT : {brokerConnected ? "CONNECTÉ" : "NON CONNECTÉ"}
+                                </span>
                             </div>
                             <p className={style.cardLabel}>FENÊTRE</p>
-                            <p className={style.windowState}>État inconnu</p>
-                            <p className={style.cardFootnote}>Position et commandes indisponibles</p>
+                            <p className={style.windowState}>
+                                {windowCommand === "open" ? "Ouverte" : "Fermée"}
+                            </p>
+                            <p className={style.cardFootnote}>
+                                {windowCommand === "open" ? "Dernière commande : ouvrir" : "Dernière commande : fermer"}
+                                {" · Position réelle non mesurée"}
+                            </p>
                             <Link className={style.cardLink} to="/fenetre">
                                 Voir le détail <span aria-hidden="true">→</span>
                             </Link>

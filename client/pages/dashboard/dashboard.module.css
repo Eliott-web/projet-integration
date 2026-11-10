@@ -27,6 +27,16 @@
     padding-bottom: 24px;
 }
 
+.clock {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 10px;
+    color: #647a70;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+
 .topbar {
     min-height: 76px;
     display: flex;

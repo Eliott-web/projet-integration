@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import {
     getLastWindowCommand,
+    isMqttConnected,
     requestSensorReading,
     sendWindowCommand,
     type SensorKind,
@@ -25,7 +26,10 @@ export function getHumidity(_request: Request, response: Response): Promise<void
 }
 
 export function getWindowCommand(_request: Request, response: Response): void {
-    response.json({ lastCommand: getLastWindowCommand() });
+    response.json({
+        lastCommand: getLastWindowCommand(),
+        brokerConnected: isMqttConnected(),
+    });
 }
 
 export async function setWindowCommand(request: Request, response: Response): Promise<void> {

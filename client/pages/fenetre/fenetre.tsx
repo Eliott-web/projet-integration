@@ -130,20 +130,17 @@ function Fenetre() {
                             </div>
                             <p className={style.windowState} aria-live="polite">
                                 {lastCommand
-                                    ? `Dernière commande : ${lastCommand.command === "open" ? "ouvrir" : "fermer"}`
+                                    ? `État acctuel : ${lastCommand.command === "open" ? "ouvert" : "fermé"} (dernière commande envoyée le ${new Date(lastCommand.sentAt).toLocaleString()})`
                                     : "Aucune commande envoyée"}
                             </p>
                             <p className={style.windowHint}>
-                                Cette information ne confirme pas la position physique de la fenêtre.
+                                (dernière commande envoyée le {new Date(lastCommand).toLocaleString()})
                             </p>
                         </div>
 
                         <div className={style.commandsPanel}>
                             <p className={style.panelEyebrow}>COMMANDES</p>
                             <h2>Positionner la fenêtre</h2>
-                            <p className={style.commandDescription}>
-                                Les commandes sont transmises au Raspberry Pi via le backend.
-                            </p>
                             <div className={style.buttonGroup}>
                                 <button
                                     className={style.openButton}
@@ -163,9 +160,6 @@ function Fenetre() {
                                 </button>
                             </div>
                             {error && <p className={style.windowHint} role="alert">{error}</p>}
-                            <p className={style.commandNote}>
-                                Commandes MQTT : <code>projet/serre/fenetre</code>
-                            </p>
                         </div>
                     </section>
 
@@ -175,8 +169,7 @@ function Fenetre() {
                             <p className={style.panelEyebrow}>INFORMATION</p>
                             <h2 id="info-title">Retour de position</h2>
                             <p className={style.infoText}>
-                                Le servo ne renvoie pas sa position réelle. La page affiche seulement la dernière
-                                commande confirmée par le broker MQTT.
+                                L'état de la fenêtre affiché ici se base uniquement sur la dernière commande envoyée. En cas de bugs, la position peut ne pas correspondre à la réalité.
                             </p>
                         </div>
                     </section>
