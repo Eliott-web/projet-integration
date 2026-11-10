@@ -5,6 +5,7 @@ import viteLogo from './assets/vite.svg'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Temperature from '../pages/temperature/temperature'
 import Humidite from '../pages/humidite/humidite'
+import Fenetre from '../pages/fenetre/fenetre'
 import './App.css'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/temperature" element={<Temperature />} />
         <Route path="/humidite" element={<Humidite />} />
+        <Route path="/fenetre" element={<Fenetre />} />
       </Routes>
     </BrowserRouter>
   )
