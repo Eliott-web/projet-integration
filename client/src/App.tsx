@@ -1,29 +1,20 @@
-import Humidite from "../pages/humidite/humidite";
+import { useState } from 'react'
+import heroImg from './assets/hero.png'
+import reactLogo from './assets/react.svg'
+import viteLogo from './assets/vite.svg'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import './App.css'
 
 function App() {
-  const path = window.location.pathname.replace(/\/$/, "") || "/";
-
-  if (path === "/humidite") {
-    return <Humidite />;
-  }
-
-  if (path === "/") {
-    return (
-      <main>
-        <h1>Monitoring de la serre</h1>
-        <nav aria-label="Pages">
-          <a href="/humidite">Humidité</a>
-        </nav>
-      </main>
-    );
-  }
+  const [count, setCount] = useState(0)
 
   return (
-    <main>
-      <h1>Page introuvable</h1>
-      <a href="/">Retour à l’accueil</a>
-    </main>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route path="/temperature" element={<Temperature />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
-export default App;
+export default App
