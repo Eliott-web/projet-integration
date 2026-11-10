@@ -1,21 +1,11 @@
+import Header from "../header/header";
 import style from "./fenetre.module.css";
 
 function Fenetre() {
     return (
         <div className={style.page}>
             <div className={style.shell}>
-                <header className={style.topbar}>
-                    <a className={style.brand} href="/" aria-label="Serre, accueil">
-                        <span className={style.brandMark}>S</span>
-                        <span>
-                            Serre<span className={style.brandDetail}> / AUTOMATISATION</span>
-                        </span>
-                    </a>
-                    <div className={style.connectionStatus} aria-live="polite">
-                        <span className={style.statusDot} />
-                        Commandes non connectées
-                    </div>
-                </header>
+                <Header />
 
                 <main>
                     <section className={style.headingRow}>
@@ -55,7 +45,7 @@ function Fenetre() {
                             <p className={style.panelEyebrow}>COMMANDES</p>
                             <h2>Positionner la fenêtre</h2>
                             <p className={style.commandDescription}>
-                                Les commandes seront disponibles une fois le backend connecté.
+                                Les commandes manuelles sont également regroupées dans la page Contrôle.
                             </p>
                             <div className={style.buttonGroup}>
                                 <button className={style.openButton} type="button" disabled>
