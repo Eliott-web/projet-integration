@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Header from "../header/header";
 import style from "./humidite.module.css";
 
 type HumidityReading = {
@@ -93,23 +94,7 @@ function Humidite() {
     return (
         <div className={style.page}>
             <div className={style.shell}>
-                <header className={style.topbar}>
-                    <a className={style.brand} href="/" aria-label="Serre, accueil">
-                        <span className={style.brandMark}>S</span>
-                        <span>Serre<span className={style.brandDetail}> / MONITORING</span></span>
-                    </a>
-                    <div className={style.connectionStatus} aria-live="polite">
-                        <span
-                            className={`${style.statusDot} ${connection === "online"
-                                    ? style.isOnline
-                                    : connection === "waiting"
-                                        ? style.isWaiting
-                                        : style.isOffline
-                                }`}
-                        />
-                        {connectionLabel[connection]}
-                    </div>
-                </header>
+                <Header />
 
                 <main>
                     <section className={style.headingRow}>
