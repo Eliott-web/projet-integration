@@ -3,7 +3,6 @@ from signal import pause
 #import pompe.pompe.py as pompe
 import paho.mqtt.client as mqtt
 import fenetres.moteur as moteur
-import humidite.humidite as humidite
 import temperature.dht11 as dht11
 
 
@@ -44,7 +43,9 @@ def on_message(client, userdata, msg):
 
   elif msg.topic == "projet/serre/humidite" :
     if commande == "read":
-      humidite.publish_humidity(client, TOPICH)
+      humidity = dht11.read_humidity()
+      if humidity is not None:
+        client.publish(TOPICH, f"{humidity:.1f}", qos=1)
 
   else :
     print("il existe pas ton topic, chef !")
