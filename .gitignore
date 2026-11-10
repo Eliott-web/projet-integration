@@ -6,7 +6,7 @@ node_modules/
 /package-lock.json
 /server/package.json
 /server/package-lock.json
-
+/server/tsconfig.json
 # Environment variables
 .env
 .env.*
