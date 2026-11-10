@@ -3,6 +3,7 @@ from signal import pause
 #import pompe.pompe.py as pompe
 import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
+import humidite.humidite as humidite
 
 #moteur
 servoPIN = 18
@@ -33,11 +34,13 @@ USERNAME = "fenetre"
 PASSWORD = "1234"
 TOPICF = "projet/serre/fenetre"
 TOPICT = "projet/serre/temperature"
+TOPICH = "projet/serre/humidite"
 
 def on_connect(client, userdata, flags, reason_code, properties):
   print(f"Connecttion avec code {reason_code}")
   client.subscribe(TOPICF)
   client.subscribe(TOPICT)
+  client.subscribe(TOPICH)
   print("abonnement au topic reussi")
 
 def on_message(client, userdata, msg):
@@ -55,6 +58,9 @@ def on_message(client, userdata, msg):
 
   elif msg.topic == "projet/serre/temperature" :
     print("il y a pas encore de truc du coup je met ça sinon j'ai une erreur quand je lance le script")
+
+  elif msg.topic == "projet/serre/humidite" :
+    print("tkt")
 
   else :
     print("il existe pas ton topic, chef !")
