@@ -1,0 +1,499 @@
+.page {
+    --ink: #153a32;
+    --muted: #647a70;
+    --line: #d7e5dd;
+    min-height: 100vh;
+    color: var(--ink);
+    text-align: left;
+    letter-spacing: 0;
+    background:
+        radial-gradient(ellipse at 92% 6%, rgba(196, 224, 204, 0.45), transparent 34%),
+        linear-gradient(120deg, #f8fbf8, #edf5f0);
+    font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+:global(#root) {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    margin: 0;
+    border: 0;
+    text-align: left;
+}
+
+.shell {
+    width: min(1120px, 100% - 64px);
+    margin: 0 auto;
+    padding-bottom: 24px;
+}
+
+.topbar {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.brandMark {
+    display: grid;
+    width: 32px;
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: 8px;
+    color: #f5fff8;
+    background: #167459;
+    font-size: 15px;
+}
+
+.brandDetail {
+    color: #779087;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.navLink {
+    padding: 9px 11px;
+    border-radius: 7px;
+    color: #526d61;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 150ms ease, color 150ms ease;
+}
+
+.navLink:hover,
+.activeLink {
+    color: #126648;
+    background: #e0eee5;
+}
+
+.brand:focus-visible,
+.navLink:focus-visible,
+.cardLink:focus-visible {
+    outline: 2px solid #167459;
+    outline-offset: 3px;
+}
+
+.heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 44px 0 28px;
+}
+
+.eyebrow,
+.cardLabel {
+    margin: 0;
+    color: #779087;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.15px;
+}
+
+.heading h1 {
+    margin: 8px 0 0;
+    color: var(--ink);
+    font-size: clamp(32px, 5vw, 44px);
+    font-weight: 750;
+    letter-spacing: -1.2px;
+    line-height: 1.1;
+}
+
+.subtitle {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.headingActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.notificationButton {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: #526d61;
+    background: rgba(255, 255, 255, 0.85);
+    transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
+}
+
+.notificationButton:hover {
+    border-color: #b7cfc2;
+    color: #126648;
+    background: #eaf4ed;
+}
+
+.notificationButton:focus-visible {
+    outline: 2px solid #167459;
+    outline-offset: 3px;
+}
+
+.notificationButton svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+}
+
+.updateBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    color: #526d61;
+    background: rgba(255, 255, 255, 0.75);
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: #d59b27;
+}
+
+.isOnline {
+    background: #21a574;
+}
+
+.isWaiting {
+    background: #d59b27;
+}
+
+.isOffline {
+    background: #c26458;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.summaryCard {
+    min-height: 224px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 21px 22px 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow: 0 12px 30px rgba(34, 79, 58, 0.045);
+}
+
+.cardHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 19px;
+}
+
+.iconHumidity,
+.iconTemperature,
+.iconWindow,
+.iconLight,
+.iconPump,
+.iconControl {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    color: #17684d;
+    background: #e5f2e9;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.iconTemperature {
+    color: #a36c19;
+    background: #fbf0dd;
+}
+
+.iconLight {
+    color: #a36c19;
+    background: #fbf0dd;
+    font-size: 17px;
+}
+
+.iconWindow {
+    color: #566f82;
+    background: #eaf0f3;
+    font-size: 18px;
+}
+
+.iconPump {
+    color: #397c67;
+    background: #e5f2e9;
+    font-size: 18px;
+}
+
+.iconControl {
+    color: #566f82;
+    background: #eaf0f3;
+    font-size: 16px;
+}
+
+.statusPill {
+    padding: 5px 8px;
+    border-radius: 99px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.45px;
+}
+
+.pillOnline {
+    color: #17684d;
+    background: #e6f4eb;
+}
+
+.pillWaiting {
+    color: #8a6a37;
+    background: #f8f1e7;
+}
+
+.pillOffline {
+    color: #9a5147;
+    background: #faece9;
+}
+
+.pillUnavailable {
+    color: #65756d;
+    background: #edf1ee;
+}
+
+.metric {
+    margin: 8px 0 0;
+    color: #153a32;
+    font-size: clamp(38px, 5vw, 52px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    line-height: 1;
+}
+
+.metric span {
+    margin-left: 5px;
+    color: #779087;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.windowState {
+    margin: 15px 0 0;
+    color: #274c3f;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.unit {
+    color: #779087;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.cardFootnote {
+    margin: 10px 0 15px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.cardLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: auto;
+    color: #17684d;
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.cardLink span {
+    font-size: 16px;
+    transition: transform 150ms ease;
+}
+
+.cardLink:hover span {
+    transform: translateX(3px);
+}
+
+.overview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 20px;
+    padding: 25px 27px;
+    border: 1px solid #d5e4db;
+    border-radius: 12px;
+    background: linear-gradient(110deg, rgba(226, 240, 230, 0.82), rgba(255, 255, 255, 0.86));
+}
+
+.overviewCopy {
+    max-width: 500px;
+}
+
+.overviewCopy h2 {
+    margin: 8px 0 7px;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 750;
+    letter-spacing: -0.3px;
+}
+
+.overviewCopy > p:last-child {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.overviewDetails {
+    display: flex;
+    align-items: center;
+    gap: 21px;
+    flex: 0 0 auto;
+}
+
+.overviewDetails > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detailValue {
+    color: #17684d;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.7px;
+}
+
+.detailLabel {
+    color: #647a70;
+    font-size: 10px;
+}
+
+.detailDivider {
+    width: 1px;
+    height: 36px;
+    background: #d3e2d9;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 26px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    color: #82968b;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+}
+
+@media (max-width: 820px) {
+    .topbar {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 15px 0;
+    }
+
+    .navigation {
+        order: 1;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .navLink {
+        white-space: nowrap;
+    }
+
+    .summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .overview {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 560px) {
+    .shell {
+        width: calc(100% - 36px);
+    }
+
+    .heading {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 34px 0 22px;
+    }
+
+    .headingActions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .summary {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .summaryCard {
+        min-height: 205px;
+    }
+
+    .overview {
+        padding: 21px;
+    }
+
+    .overviewDetails {
+        gap: 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .navLink,
+    .cardLink span,
+    .notificationButton {
+        transition: none;
+    }
+}
