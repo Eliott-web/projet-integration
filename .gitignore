@@ -3,6 +3,7 @@ node_modules/
 
 # Accidental npm files at repository root
 /package.json
+/client/package.json
 /package-lock.json
 /server/package.json
 /server/package-lock.json
