@@ -11,6 +11,7 @@ const clientOrigins = (process.env.CLIENT_ORIGIN ?? "http://localhost:5173,http:
   .map((origin) => origin.trim());
 
 app.use(cors({ origin: clientOrigins }));
+app.use(express.json());
 app.use(routes);
 
 startMqtt();

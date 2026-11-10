@@ -9,7 +9,7 @@ type HumidityReading = {
 
 type ConnectionState = "loading" | "online" | "waiting" | "offline";
 
-const apiBaseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+const apiBaseUrl = import.meta.env.VITE_API_URL ?? `http://${window.location.hostname}:3000`;
 
 function formatTime(value: string): string {
     const date = new Date(value);
