@@ -1,7 +1,8 @@
 import "dotenv/config";
 import cors from "cors";
 import express from "express";
-import { getLatestHumidity, startMqtt, stopMqtt } from "./services/mqtt.js";
+import routes from "./routes/routes.js";
+import { startMqtt, stopMqtt } from "./services/mqtt.js";
 
 const app = express();
 const port = Number(process.env.PORT ?? 3000);
@@ -10,26 +11,12 @@ const clientOrigins = (process.env.CLIENT_ORIGIN ?? "http://localhost:5173,http:
   .map((origin) => origin.trim());
 
 app.use(cors({ origin: clientOrigins }));
-
-app.get("/", (_request, response) => {
-  response.type("text").send(`http://localhost:${port}`);
-});
-
-app.get("/api/humidite", (_request, response) => {
-  const reading = getLatestHumidity();
-  if (!reading) {
-    response.status(503).json({ error: "Aucune mesure d'humidité reçue pour le moment." });
-    return;
-  }
-
-  response.json(reading);
-});
+app.use(routes);
 
 startMqtt();
 
 const server = app.listen(port, () => {
-  console.log(`Serveur HTTP démarré : http://localhost:${port}`);
-  console.log(`API humidité : http://localhost:${port}/api/humidite`);
+  console.log(`Serveur HTTP démarré : http://localhost:${port}/`);
 });
 
 function shutdown(): void {
