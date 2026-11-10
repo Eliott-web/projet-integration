@@ -1,30 +1,9 @@
 from gpiozero import Button
 from signal import pause
 #import pompe.pompe.py as pompe
-import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
 import humidite.humidite as humidite
-
-#moteurg
-servoPIN = 18
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(servoPIN, GPIO.OUT)
-p = GPIO.PWM(servoPIN, 50) # 50Hz -> 20ms
-
-def angle_to_percent (angle) :
-  start = 2.5
-  end = 12.5
-  ratio = (end - start)/180 #Calcul ratio from angle to percent
-
-  angle_as_percent = angle * ratio
-
-  return start + angle_as_percent
-
-def open():
-  p.ChangeDutyCycle(angle_to_percent(180))
-
-def close():
-  p.ChangeDutyCycle(angle_to_percent(100))
+import fenetres.moteur as moteur
 
 
 # MQTT
@@ -48,10 +27,10 @@ def on_message(client, userdata, msg):
 
   if msg.topic == "projet/serre/fenetre" :
     if commande == "open" :
-      open()
+      moteur.open()
 
     elif commande == "close" :
-      close()
+      moteur.close()
 
     else :
       print("ERREUR pas la bonne commande")
@@ -72,7 +51,7 @@ mqttc.on_connect = on_connect
 mqttc.on_message = on_message
 
 # boucle qui fait tourner le code
-p.start(angle_to_percent(100))
+moteur.start()
 try:
   print("connection au broker")
   mqttc.connect(BROKER, PORT, 60)
@@ -80,8 +59,7 @@ try:
 
 except KeyboardInterrupt:
   mqttc.disconnect()
-  p.stop()
-  GPIO.cleanup()
+  moteur.stop()
 
 #bouton = Button(27, bounce_time=0.05)  # bounce_time : anti-rebond
 #bouton.when_pressed = lambda: pompe.tourner(0)  # lambda sert à ajouter la variable à la fonction

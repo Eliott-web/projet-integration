@@ -3,16 +3,44 @@ import paho.mqtt.client as mqtt
 
 # moteur
 servoPIN = 18
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(servoPIN, GPIO.OUT)
+p = None
 
-p = GPIO.PWM(servoPIN, 50) # 50Hz -> 20ms
+
+def angle_to_percent(angle):
+  start = 2.5
+  end = 12.5
+  ratio = (end - start) / 180
+
+  return start + angle * ratio
+
+
+def start():
+  global p
+  GPIO.setmode(GPIO.BCM)
+  GPIO.setup(servoPIN, GPIO.OUT)
+  p = GPIO.PWM(servoPIN, 50) # 50Hz -> 20ms
+  p.start(angle_to_percent(100))
+
+
+def stop():
+  global p
+  if p is not None:
+    p.stop()
+    p = None
+  GPIO.cleanup()
+
 
 def open():
+  if p is None:
+    raise RuntimeError("Le moteur n'est pas démarré")
   p.ChangeDutyCycle(angle_to_percent(180))
 
+
 def close():
+  if p is None:
+    raise RuntimeError("Le moteur n'est pas démarré")
   p.ChangeDutyCycle(angle_to_percent(100))
+
 
 # MQTT
 BROKER = "localhost"
@@ -21,46 +49,39 @@ USERNAME = "fenetre"
 PASSWORD = "1234"
 TOPIC = "projet/serre/fenetre"
 
+
 def on_connect(client, userdata, flags, reason_code, properties):
   print(f"Connecttion avec code {reason_code}")
   client.subscribe(TOPIC)
   print("abonnement au topic reussi")
 
+
 def on_message(client, userdata, msg):
   commande = msg.payload.decode("utf-8")
   print(commande)
-  if commande == "open" :
+  if commande == "open":
     open()
-
-  elif commande == "close" :
+  elif commande == "close":
     close()
-
-  else :
+  else:
     print("ERREUR pas la bonne commande")
 
-# client mqtt
-mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-mqttc.username_pw_set(USERNAME, PASSWORD)
-mqttc.on_connect = on_connect
-mqttc.on_message = on_message
 
-# code
-def angle_to_percent (angle) :
-  start = 2.5
-  end = 12.5
-  ratio = (end - start)/180 #Calcul ratio from angle to percent
+def run():
+  mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+  mqttc.username_pw_set(USERNAME, PASSWORD)
+  mqttc.on_connect = on_connect
+  mqttc.on_message = on_message
 
-  angle_as_percent = angle * ratio
+  try:
+    start()
+    print("connection au broker")
+    mqttc.connect(BROKER, PORT, 60)
+    mqttc.loop_forever()
+  except KeyboardInterrupt:
+    mqttc.disconnect()
+    stop()
 
-  return start + angle_as_percent
 
-p.start(angle_to_percent(100))
-try:
-  print("connection au broker")
-  mqttc.connect(BROKER, PORT, 60)
-  mqttc.loop_forever()
-
-except KeyboardInterrupt:
-  mqttc.disconnect()
-  p.stop()
-  GPIO.cleanup()
+if __name__ == "__main__":
+  run()
