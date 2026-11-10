@@ -12,10 +12,8 @@ build/
 
 # Logs
 *.log
+*/package-lock.json
 
 # OS
 .DS_Store
 Thumbs.db
-
-*/package-lock.json
-*/package.json
