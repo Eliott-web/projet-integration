@@ -2,7 +2,7 @@ import adafruit_dht
 import board
 from time import sleep
 
-dht_device = adafruit_dht.DHT11(board.D4, use_pulseio=False)
+dht_device = adafruit_dht.DHT11(board.D4)
 
 def read_temperature():
     try:
@@ -34,9 +34,15 @@ def cleanup():
 if __name__ == "__main__":
     try:
         while True:
-            print(read_temperature())
+            try:
+                temperature = dht_device.temperature
+                humidity = dht_device.humidity
+                print(f"Température : {temperature} °C | Humidité : {humidity} %")
+            except RuntimeError as error:
+                print(f"Lecture ratée : {error}")
+
             sleep(5)
     except KeyboardInterrupt:
         pass
     finally:
-        cleanup()
+        dht_device.exit()
