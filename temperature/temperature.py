@@ -1,59 +1,20 @@
-import RPi.GPIO as GPIO
-import dht11
-import time
+import adafruit_dht
+import board
 import paho.mqtt.client as mqtt
 
-# MQTT
-BROKER = "localhost"
-PORT = 1883
-USERNAME = "fenetre"
-PASSWORD = "1234"
 TOPIC = "projet/serre/temperature"
 
-def on_connect(client, userdata, flags, reason_code, properties):
-    print(f"Connecttion avec code {reason_code}")
-    client.subscribe(TOPIC)
-    print("abonnement au topic reussi")
+dht_device = adafruit_dht.DHT11(board.D4)
 
-def on_message(client, userdata, msg):
-    commande = msg.payload.decode("utf-8")
-    print(commande)
-    if commande == "read" :
-        read_temperature()
-
-    else :
-        print("ERREUR pas la bonne commande")
-
-def read_temperature():
-    # Je désactive les messages d'erreur
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-
-    capteur = dht11.DHT11(pin=4)
-
-
+def on_controller_tick(mqtt_client: mqtt.Client) -> None:
     try:
-        resultat = capteur.read()
+        temperature = dht_device.temperature
+        if temperature is not None:
+            mqtt_client.publish(TOPIC, f"{temperature:.1f}", qos=1)
+            print(f"Température publiée : {temperature:.1f} °C")
+    except RuntimeError:
+        pass
 
-        if resultat.is_valid():
-            print(f"Température : {resultat.temperature:.1f} °C")
 
-    except KeyboardInterrupt:
-        print("\nProgramme arrêté.")
-
-    finally:
-        GPIO.cleanup()
-
-try:
-    # client mqtt
-    mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-    mqttc.username_pw_set(USERNAME, PASSWORD)
-    mqttc.on_connect = on_connect
-    mqttc.on_message = on_message
-
-    mqttc.connect(BROKER, PORT)
-    mqttc.loop_forever()
-except KeyboardInterrupt:
-    mqttc.disconnect()
-    GPIO.cleanup()
-    GPIO.cleanup()
+def cleanup() -> None:
+    dht_device.exit()
