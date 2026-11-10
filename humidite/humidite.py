@@ -1,3 +1,5 @@
+import time
+
 import adafruit_dht
 import board
 import paho.mqtt.client as mqtt
