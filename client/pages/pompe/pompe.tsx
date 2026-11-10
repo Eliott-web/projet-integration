@@ -43,7 +43,7 @@ function Pompe() {
                             <p className={style.panelEyebrow}>COMMANDE MANUELLE</p>
                             <h2 className={style.panelTitle}>Piloter la pompe</h2>
                             <p className={style.panelText}>
-                                Les commandes seront disponibles lorsque la pompe sera reliée à l’interface.
+                                Les commandes manuelles sont également regroupées dans la page Contrôle.
                             </p>
                             <div className={style.controls}>
                                 <button className={style.controlButton} type="button" disabled>
@@ -54,7 +54,7 @@ function Pompe() {
                                 </button>
                             </div>
                             <p className={style.infoText}>
-                                Les boutons sont désactivés tant qu’aucune API de commande n’est configurée.
+                                Les commandes resteront désactivées tant qu’aucune API n’est configurée.
                             </p>
                         </aside>
                     </section>
