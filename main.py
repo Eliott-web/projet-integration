@@ -2,8 +2,8 @@ from gpiozero import Button
 from signal import pause
 #import pompe.pompe.py as pompe
 import paho.mqtt.client as mqtt
-import humidite.humidite as humidite
 import fenetres.moteur as moteur
+import temperature.dht11 as dht11
 
 
 # MQTT
@@ -36,10 +36,16 @@ def on_message(client, userdata, msg):
       print("ERREUR pas la bonne commande")
 
   elif msg.topic == "projet/serre/temperature" :
-    print("il y a pas encore de truc du coup je met ça sinon j'ai une erreur quand je lance le script")
+    if commande == "read":
+      temperature = dht11.read_temperature()
+      if temperature is not None:
+        client.publish(TOPICT, f"{temperature:.1f}", qos=1)
 
   elif msg.topic == "projet/serre/humidite" :
-    print("tkt")
+    if commande == "read":
+      humidity = dht11.read_humidity()
+      if humidity is not None:
+        client.publish(TOPICH, f"{humidity:.1f}", qos=1)
 
   else :
     print("il existe pas ton topic, chef !")
@@ -60,6 +66,7 @@ try:
 except KeyboardInterrupt:
   mqttc.disconnect()
   moteur.stop()
+  dht11.cleanup()
 
 #bouton = Button(27, bounce_time=0.05)  # bounce_time : anti-rebond
 #bouton.when_pressed = lambda: pompe.tourner(0)  # lambda sert à ajouter la variable à la fonction
