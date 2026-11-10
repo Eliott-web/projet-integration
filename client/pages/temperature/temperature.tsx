@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Header from "../header/header";
 import style from "./temperature.module.css";
 
 type TemperatureReading = {
@@ -93,27 +94,7 @@ function Temperature() {
     return (
         <div className={style.page}>
             <div className={style.shell}>
-                <header className={style.topbar}>
-                    <a className={style.brand} href="/" aria-label="Serre, accueil">
-                        <span className={style.brandMark}>S</span>
-                        <span>Serre<span className={style.brandDetail}> / MONITORING</span></span>
-                    </a>
-                    <nav className={style.navigation} aria-label="Pages de mesure">
-                        <a className={style.navLink} href="/">Humidité</a>
-                        <a className={`${style.navLink} ${style.activeLink}`} href="/temperature" aria-current="page">Température</a>
-                    </nav>
-                    <div className={style.connectionStatus} aria-live="polite">
-                        <span
-                            className={`${style.statusDot} ${connection === "online"
-                                    ? style.isOnline
-                                    : connection === "waiting"
-                                        ? style.isWaiting
-                                        : style.isOffline
-                                }`}
-                        />
-                        {connectionLabel[connection]}
-                    </div>
-                </header>
+                <Header />
 
                 <main>
                     <section className={style.headingRow}>
