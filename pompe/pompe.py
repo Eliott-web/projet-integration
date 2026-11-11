@@ -4,7 +4,7 @@ from time import sleep
 gpio_dir = OutputDevice(22)  # direction -> PmodHB5 J1 pin 1 (DIR)
 gpio_en = OutputDevice(23)   # enable    -> PmodHB5 J1 pin 2 (EN)
 
-def arreter_pompe():  # stoppe la pompe
+def arreter_pompe():
     gpio_en.off()
 
 def tourner_pompe(sens, temps):
