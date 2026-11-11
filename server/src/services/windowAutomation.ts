@@ -21,7 +21,8 @@ export function getDesiredWindowCommand(
   const hour = now.getHours();
   if (hour < dayStartsAtHour || hour >= nightStartsAtHour) return "open";
 
-  if (temperature < 15 || temperature > 25) return "open";
+  if (temperature < 15) return "close";
+  if (temperature > 25) return "open";
   if (humidity > 70) return "open";
   if (humidity < 35) return "close";
   return "close";
