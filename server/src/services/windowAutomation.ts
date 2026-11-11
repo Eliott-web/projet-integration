@@ -1,4 +1,5 @@
 import {
+  getLastManualWindowCommand,
   getLastWindowCommand,
   isMqttConnected,
   requestSensorReading,
@@ -13,19 +14,28 @@ const checkIntervalMs = 30_000;
 let interval: ReturnType<typeof setInterval> | null = null;
 let checkInProgress = false;
 
+function getNightCycleKey(date: Date): string | null {
+  const hour = date.getHours();
+  if (hour >= dayStartsAtHour && hour < nightStartsAtHour) return null;
+
+  const cycleStart = new Date(date);
+  if (hour < dayStartsAtHour) cycleStart.setDate(cycleStart.getDate() - 1);
+  return `${cycleStart.getFullYear()}-${cycleStart.getMonth()}-${cycleStart.getDate()}`;
+}
+
 export function getDesiredWindowCommand(
   temperature: number,
   humidity: number,
   now: Date = new Date(),
-): WindowCommand["command"] {
-  const hour = now.getHours();
-  if (hour < dayStartsAtHour || hour >= nightStartsAtHour) return "open";
+  nightScheduleOverridden = false,
+): WindowCommand["command"] | null {
+  if (getNightCycleKey(now) !== null && !nightScheduleOverridden) return "open";
 
   if (temperature < 15) return "close";
   if (temperature > 25) return "open";
   if (humidity > 70) return "open";
   if (humidity < 35) return "close";
-  return "close";
+  return null;
 }
 
 async function checkWindow(): Promise<void> {
@@ -34,20 +44,33 @@ async function checkWindow(): Promise<void> {
   checkInProgress = true;
   try {
     const now = new Date();
-    let command: WindowCommand["command"];
+    const nightCycleKey = getNightCycleKey(now);
+    const lastManualCommand = getLastManualWindowCommand();
+    const nightScheduleOverridden =
+      nightCycleKey !== null &&
+      lastManualCommand !== null &&
+      getNightCycleKey(new Date(lastManualCommand.sentAt)) === nightCycleKey;
+    let command: WindowCommand["command"] | null;
 
-    if (now.getHours() < dayStartsAtHour || now.getHours() >= nightStartsAtHour) {
+    if (nightCycleKey !== null && !nightScheduleOverridden) {
       command = "open";
     } else {
       const [temperature, humidity] = await Promise.all([
         requestSensorReading("temperature"),
         requestSensorReading("humidite"),
       ]);
-      command = getDesiredWindowCommand(temperature.value, humidity.value, now);
+      command = getDesiredWindowCommand(
+        temperature.value,
+        humidity.value,
+        now,
+        nightScheduleOverridden,
+      );
     }
 
+    if (command === null) return;
+
     if (getLastWindowCommand()?.command !== command) {
-      await sendWindowCommand(command);
+      await sendWindowCommand(command, "automation");
       console.log(`Automatisation fenêtre : ${command}`);
     }
   } catch (error) {

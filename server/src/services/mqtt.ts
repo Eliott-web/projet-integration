@@ -36,6 +36,7 @@ const readingTimeoutMs = 8000;
 let client: MqttClient | null = null;
 let mqttReady = false;
 let lastWindowCommand: WindowCommand | null = null;
+let lastManualWindowCommand: WindowCommand | null = null;
 const pendingReadings: Partial<Record<SensorKind, PendingReading>> = {};
 
 function rejectPendingReadings(error: Error): void {
@@ -145,7 +146,10 @@ export function requestSensorReading(kind: SensorKind): Promise<SensorReading> {
   return promise;
 }
 
-export function sendWindowCommand(command: WindowCommand["command"]): Promise<WindowCommand> {
+export function sendWindowCommand(
+  command: WindowCommand["command"],
+  source: "manual" | "automation" = "manual",
+): Promise<WindowCommand> {
   if (!client || !mqttReady) {
     return Promise.reject(new Error("Le backend n'est pas connecté au broker MQTT."));
   }
@@ -158,6 +162,7 @@ export function sendWindowCommand(command: WindowCommand["command"]): Promise<Wi
       }
 
       lastWindowCommand = { command, sentAt: new Date().toISOString() };
+      if (source === "manual") lastManualWindowCommand = lastWindowCommand;
       resolve(lastWindowCommand);
     });
   });
@@ -165,6 +170,10 @@ export function sendWindowCommand(command: WindowCommand["command"]): Promise<Wi
 
 export function getLastWindowCommand(): WindowCommand | null {
   return lastWindowCommand;
+}
+
+export function getLastManualWindowCommand(): WindowCommand | null {
+  return lastManualWindowCommand;
 }
 
 export function isMqttConnected(): boolean {
