@@ -1,0 +1,425 @@
+﻿.page {
+    --ink: #153a32;
+    --muted: #647a70;
+    --line: #d7e5dd;
+    min-height: 100vh;
+    color: var(--ink);
+    text-align: left;
+    letter-spacing: 0;
+    background-color: #edf5f0;
+    background-image: linear-gradient(120deg, rgba(255, 255, 255, 0.72), rgba(235, 246, 239, 0.82));
+    font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+:global(#root) {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    text-align: left;
+}
+
+.shell {
+    width: min(1120px, 100% - 64px);
+    margin: 0 auto;
+    padding: 0 0 30px;
+}
+
+.topbar {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.brandMark {
+    display: grid;
+    width: 30px;
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: 6px;
+    color: #f5fff8;
+    background: #167459;
+    font-size: 15px;
+}
+
+.brandDetail {
+    color: #779087;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.navigation {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navLink {
+    padding: 8px 12px;
+    border-radius: 7px;
+    color: #526d61;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.navLink:hover,
+.activeLink {
+    color: #126648;
+    background: #e0eee5;
+}
+
+.connectionStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: #526d61;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.statusDot,
+.liveLabel span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: #94a49a;
+}
+
+.isOnline,
+.liveLabel span {
+    background: #21a574;
+}
+
+.isWaiting {
+    background: #d59b27;
+}
+
+.isOffline {
+    background: #c26458;
+}
+
+.headingRow,
+.historyHeading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.headingRow {
+    padding: 44px 0 24px;
+}
+
+.eyebrow,
+.panelEyebrow {
+    color: #779087;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.15px;
+}
+
+.headingRow h1,
+.historyHeading h2 {
+    margin: 7px 0 0;
+    color: var(--ink);
+    font-family: inherit;
+    font-weight: 750;
+    letter-spacing: -0.8px;
+}
+
+.headingRow h1 {
+    font-size: clamp(32px, 5vw, 44px);
+    line-height: 1.1;
+}
+
+.subtitle {
+    margin-top: 9px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.refreshButton {
+    padding: 10px 15px;
+    border: 1px solid #c8dacf;
+    border-radius: 7px;
+    color: #17684d;
+    background: #fff;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.refreshButton:hover {
+    background: #f3faf5;
+}
+
+.readingGrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(220px, 1fr);
+    gap: 16px;
+}
+
+.currentReading,
+.statusPanel,
+.historySection {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 12px 30px rgba(34, 79, 58, 0.045);
+}
+
+.currentReading {
+    padding: 25px 28px 20px;
+}
+
+.readingTopline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #779087;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.liveLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #526d61;
+    letter-spacing: 0.5px;
+}
+
+.liveLabel span {
+    width: 7px;
+    height: 7px;
+}
+
+.metric {
+    margin: 14px 0 20px;
+    color: #153a32;
+    font-size: clamp(64px, 10vw, 96px);
+    font-weight: 700;
+    letter-spacing: -5px;
+    line-height: 1;
+}
+
+.metric span {
+    margin-left: 8px;
+    color: #779087;
+    font-size: 27px;
+    font-weight: 600;
+    letter-spacing: 0;
+}
+
+.meter {
+    height: 10px;
+    overflow: hidden;
+    border-radius: 99px;
+    background: #e7efe9;
+}
+
+.meter span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #55ac79, #e4a449);
+    transition: width 250ms ease;
+}
+
+.scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7px;
+    color: #8a9b91;
+    font-size: 11px;
+}
+
+.receivedAt {
+    margin-top: 19px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.statusPanel {
+    padding: 25px 23px;
+}
+
+.sensorState {
+    margin-top: 8px;
+    color: #274c3f;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.statusDivider {
+    height: 1px;
+    margin: 22px 0;
+    background: var(--line);
+}
+
+.lastReading {
+    margin-top: 8px;
+    color: #274c3f;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.errorMessage {
+    margin-top: 15px;
+    color: #8a6750;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.historySection {
+    margin-top: 16px;
+    padding: 22px 25px;
+}
+
+.historyHeading {
+    align-items: center;
+}
+
+.historyHeading h2 {
+    font-size: 20px;
+}
+
+.historyCount {
+    color: #779087;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.chart {
+    display: flex;
+    height: 190px;
+    align-items: end;
+    gap: 12px;
+    margin: 22px 0 0;
+    padding: 0;
+    overflow-x: auto;
+    list-style: none;
+}
+
+.barColumn {
+    display: flex;
+    min-width: 46px;
+    height: 100%;
+    flex: 1 0 46px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    gap: 7px;
+}
+
+.barValue,
+.barTime {
+    color: #779087;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+.bar {
+    width: min(100%, 34px);
+    min-height: 4px;
+    border-radius: 5px 5px 2px 2px;
+    background: #a7ccb2;
+}
+
+.latestBar {
+    background: #278459;
+}
+
+.emptyHistory {
+    display: flex;
+    min-height: 142px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #779087;
+    font-size: 13px;
+}
+
+.emptyMark {
+    display: grid;
+    width: 34px;
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: 50%;
+    color: #26734f;
+    background: #e4f0e7;
+    font-size: 20px;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 23px;
+    color: #8a9b91;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+}
+
+@media (max-width: 700px) {
+    .shell {
+        width: min(100% - 32px, 520px);
+    }
+
+    .topbar {
+        min-height: 68px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 10px 0;
+    }
+
+    .navigation {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .connectionStatus {
+        font-size: 11px;
+    }
+
+    .headingRow {
+        padding-top: 30px;
+    }
+
+    .readingGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .currentReading,
+    .statusPanel,
+    .historySection {
+        padding: 20px;
+    }
+
+    .footer {
+        flex-direction: column;
+    }
+}

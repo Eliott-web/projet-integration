@@ -1,6 +1,14 @@
 # Dependencies
 node_modules/
 
+# Accidental npm files at repository root
+/package.json
+/client/package.json
+/package-lock.json
+/server/package.json
+/server/package-lock.json
+/server/tsconfig.json
+!/server/tsconfig.json
 # Environment variables
 .env
 .env.*
@@ -12,6 +20,7 @@ build/
 
 # Logs
 *.log
+*/package-lock.json
 
 # OS
 .DS_Store
