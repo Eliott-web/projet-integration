@@ -2,6 +2,7 @@ import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import routes from "./routes/routes.js";
+import { startWindowAutomation, stopWindowAutomation } from "./services/windowAutomation.js";
 import { startMqtt, stopMqtt } from "./services/mqtt.js";
 
 const app = express();
@@ -15,12 +16,14 @@ app.use(express.json());
 app.use(routes);
 
 startMqtt();
+startWindowAutomation();
 
 const server = app.listen(port, () => {
   console.log(`Serveur HTTP démarré : http://localhost:${port}/`);
 });
 
 function shutdown(): void {
+  stopWindowAutomation();
   stopMqtt();
   server.close(() => process.exit(0));
 }
