@@ -2,8 +2,8 @@ from gpiozero import Button
 from signal import pause
 #import pompe.pompe.py as pompe
 import paho.mqtt.client as mqtt
-import fenetres.moteur as moteur
-import temperature.dht11 as dht11
+import elec.fenetres.moteur as moteur
+import elec.temperature.dht11 as dht11
 
 
 # MQTT
