@@ -2,7 +2,6 @@
 node_modules/
 
 # Accidental npm files at repository root
-/package.json
 /client/package.json
 /package-lock.json
 /server/package.json
@@ -20,7 +19,6 @@ build/
 
 # Logs
 *.log
-*/package-lock.json
 
 # OS
 .DS_Store
