@@ -6,12 +6,14 @@ import Dashboard from '../pages/dashboard/dashboard'
 import Luminosite from '../pages/luminosite/luminosite'
 import Control from '../pages/control/control'
 import Notification from '../pages/notification/notification'
+import WindowNotifications from '../pages/notification/window-notifications'
 import Pompe from '../pages/pompe/pompe'
 import './App.css'
 
 function App() {
   return (
     <BrowserRouter>
+      <WindowNotifications />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/temperature" element={<Temperature />} />
