@@ -1,0 +1,3 @@
+Raspberry:
+
+GPIO 22: enable transistor de pompe
