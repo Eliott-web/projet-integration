@@ -1,19 +1,13 @@
 from gpiozero import OutputDevice
 from time import sleep
 
-gpio_dir = OutputDevice(22)  # direction
-gpio_en = OutputDevice(23)   # enable (marche/arrêt)
+gpio_en = OutputDevice(22)
 
-temps_mort = 0.5        # temps mort (s) avant de changer de sens
-
-def arreter(): # stoppe la pompe
-    gpio_en.off()
-
-def tourner(sens): # sens : 0 ou 1.
-    # Si la pompe tourne déjà dans l'autre sens, temps_mort avant d'inverser
-    if gpio_en.value and gpio_dir.value != sens:
-        arreter()
-        sleep(temps_mort)
-
-    gpio_dir.value = sens
+def allumer_pompe(temps):
+    if temps <= 0:
+        raise ValueError("temps doit être supérieur à 0")
     gpio_en.on()
+    try:
+        sleep(temps)
+    finally:
+        gpio_en.off()
