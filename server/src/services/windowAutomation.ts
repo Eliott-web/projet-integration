@@ -14,6 +14,11 @@ const checkIntervalMs = 30_000;
 let interval: ReturnType<typeof setInterval> | null = null;
 let checkInProgress = false;
 
+type WindowDecision = {
+  command: WindowCommand["command"];
+  reason: string;
+};
+
 function getNightCycleKey(date: Date): string | null {
   const hour = date.getHours();
   if (hour >= dayStartsAtHour && hour < nightStartsAtHour) return null;
@@ -29,12 +34,32 @@ export function getDesiredWindowCommand(
   now: Date = new Date(),
   nightScheduleOverridden = false,
 ): WindowCommand["command"] | null {
-  if (getNightCycleKey(now) !== null && !nightScheduleOverridden) return "open";
+  return getWindowDecision(temperature, humidity, now, nightScheduleOverridden)?.command ?? null;
+}
 
-  if (temperature < 15) return "close";
-  if (temperature > 25) return "open";
-  if (humidity > 70) return "open";
-  if (humidity < 35) return "close";
+function getWindowDecision(
+  temperature: number | null,
+  humidity: number | null,
+  now: Date,
+  nightScheduleOverridden: boolean,
+): WindowDecision | null {
+  if (getNightCycleKey(now) !== null && !nightScheduleOverridden) {
+    return { command: "open", reason: "Horaire nocturne (entre 18 h et 8 h)." };
+  }
+  if (temperature === null || humidity === null) return null;
+
+  if (temperature < 15) {
+    return { command: "close", reason: `Température basse (${temperature} °C, seuil : 15 °C).` };
+  }
+  if (temperature > 25) {
+    return { command: "open", reason: `Température élevée (${temperature} °C, seuil : 25 °C).` };
+  }
+  if (humidity > 70) {
+    return { command: "open", reason: `Humidité élevée (${humidity} %, seuil : 70 %).` };
+  }
+  if (humidity < 35) {
+    return { command: "close", reason: `Humidité basse (${humidity} %, seuil : 35 %).` };
+  }
   return null;
 }
 
@@ -50,16 +75,16 @@ async function checkWindow(): Promise<void> {
       nightCycleKey !== null &&
       lastManualCommand !== null &&
       getNightCycleKey(new Date(lastManualCommand.sentAt)) === nightCycleKey;
-    let command: WindowCommand["command"] | null;
+    let decision: WindowDecision | null;
 
     if (nightCycleKey !== null && !nightScheduleOverridden) {
-      command = "open";
+      decision = getWindowDecision(null, null, now, false);
     } else {
       const [temperature, humidity] = await Promise.all([
         requestSensorReading("temperature"),
         requestSensorReading("humidite"),
       ]);
-      command = getDesiredWindowCommand(
+      decision = getWindowDecision(
         temperature.value,
         humidity.value,
         now,
@@ -67,11 +92,11 @@ async function checkWindow(): Promise<void> {
       );
     }
 
-    if (command === null) return;
+    if (decision === null) return;
 
-    if (getLastWindowCommand()?.command !== command) {
-      await sendWindowCommand(command, "automation");
-      console.log(`Automatisation fenêtre : ${command}`);
+    if (getLastWindowCommand()?.command !== decision.command) {
+      await sendWindowCommand(decision.command, "automation", decision.reason);
+      console.log(`Automatisation fenêtre : ${decision.command} (${decision.reason})`);
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

@@ -1,4 +1,5 @@
 import { connect, type MqttClient } from "mqtt";
+import { recordWindowNotification } from "./windowNotifications.js";
 
 export type SensorKind = "temperature" | "humidite";
 
@@ -149,6 +150,7 @@ export function requestSensorReading(kind: SensorKind): Promise<SensorReading> {
 export function sendWindowCommand(
   command: WindowCommand["command"],
   source: "manual" | "automation" = "manual",
+  reason = "Commande manuelle depuis l’interface.",
 ): Promise<WindowCommand> {
   if (!client || !mqttReady) {
     return Promise.reject(new Error("Le backend n'est pas connecté au broker MQTT."));
@@ -163,6 +165,11 @@ export function sendWindowCommand(
 
       lastWindowCommand = { command, sentAt: new Date().toISOString() };
       if (source === "manual") lastManualWindowCommand = lastWindowCommand;
+      recordWindowNotification(
+        command,
+        source === "manual" ? "Commande manuelle depuis l’interface." : reason,
+        lastWindowCommand.sentAt,
+      );
       resolve(lastWindowCommand);
     });
   });
