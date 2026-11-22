@@ -1,5 +1,9 @@
 import { connect, type MqttClient } from "mqtt";
 import { recordWindowNotification } from "./windowNotifications.js";
+import {
+  saveHumidity,
+  saveTemperature
+} from "./sensorService.js";
 
 export type SensorKind = "temperature" | "humidite";
 
@@ -84,12 +88,28 @@ export function startMqtt(): void {
 
   client.on("message", (receivedTopic, payload) => {
     const kind = (Object.keys(sensorTopics) as SensorKind[]).find(
-      (candidate) => sensorTopics[candidate] === receivedTopic,
+        (candidate) => sensorTopics[candidate] === receivedTopic,
     );
+
     if (!kind) return;
 
     const reading = parseReading(kind, payload.toString().trim());
-    if (reading) pendingReadings[kind]?.resolve(reading);
+
+    if (!reading) return;
+
+    pendingReadings[kind]?.resolve(reading);
+
+    if (kind === "humidite") {
+      void saveHumidity(reading.value).catch((error) => {
+        console.error("Erreur sauvegarde humidité :", error);
+      });
+    }
+
+    if (kind === "temperature") {
+      void saveTemperature(reading.value).catch((error) => {
+        console.error("Erreur sauvegarde température :", error);
+      });
+    }
   });
 
   client.on("close", () => {
