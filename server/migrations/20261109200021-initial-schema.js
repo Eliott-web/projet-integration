@@ -67,6 +67,10 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false
       },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       date: {
         type: DataTypes.DATE,
         allowNull: false

@@ -19,8 +19,8 @@ function Header() {
                 <NavLink className={({ isActive }) => `${style.navLink}${isActive ? ` ${style.activeLink}` : ""}`} to="/temperature">
                     Température
                 </NavLink>
-                <NavLink className={({ isActive }) => `${style.navLink}${isActive ? ` ${style.activeLink}` : ""}`} to="/luminosite">
-                    Luminosité
+                <NavLink className={({ isActive }) => `${style.navLink}${isActive ? ` ${style.activeLink}` : ""}`} to="/plantes">
+                    Plantes
                 </NavLink>
                 <NavLink className={({ isActive }) => `${style.navLink}${isActive ? ` ${style.activeLink}` : ""}`} to="/fenetre">
                     Fenêtre

@@ -7,6 +7,7 @@ import {
     removeAllWindowNotifications,
     removeWindowNotification,
     setWindowCommand,
+    getPlantes
 } from "../controller/integration.controller.js";
 
 const router = Router();
@@ -23,5 +24,6 @@ router.post("/api/fenetre", setWindowCommand);
 router.get("/api/notifications", getNotifications);
 router.delete("/api/notifications", removeAllWindowNotifications);
 router.delete("/api/notifications/:id", removeWindowNotification);
+router.get("/api/plantes", getPlantes);
 
 export default router;

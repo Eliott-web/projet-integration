@@ -11,6 +11,7 @@ import {
     deleteWindowNotification,
     getWindowNotifications,
 } from "../services/windowNotifications.js";
+import Plante from '../tables/plante.js';
 
 async function getSensorReading(kind: SensorKind, response: Response): Promise<void> {
     try {
@@ -97,3 +98,14 @@ export async function setWindowCommand(request: Request, response: Response): Pr
         response.status(503).json({ error: message });
     }
 }
+
+
+export const getPlantes = async (_req: Request, res: Response) => {
+    try {
+        const plantes = await Plante.findAll({ order: [['date', 'DESC']] });
+        res.json(plantes);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des plantes :', error);
+        res.status(500).json({ error: 'Impossible de récupérer les plantes' });
+    }
+};

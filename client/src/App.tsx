@@ -8,6 +8,7 @@ import Control from '../pages/control/control'
 import Notification from '../pages/notification/notification'
 import WindowNotifications from '../pages/notification/window-notifications'
 import Pompe from '../pages/pompe/pompe'
+import Plantes from '../pages/plantes/plantes'
 import './App.css'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/control" element={<Control />} />
         <Route path="/notification" element={<Notification />} />
         <Route path="/pompe" element={<Pompe />} />
+        <Route path="/plantes" element={<Plantes />} />
       </Routes>
     </BrowserRouter>
   )

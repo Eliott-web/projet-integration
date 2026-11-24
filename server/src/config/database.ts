@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { Sequelize } from 'sequelize';
 
 class Database {
@@ -31,5 +32,8 @@ class Database {
 }
 
 const sequelize = Database.getInstance();
-
+import dotenv from 'dotenv';
+const result = dotenv.config();
+console.log('dotenv erreur =', result.error?.message ?? 'aucune');
+console.log('clés lues =', Object.keys(result.parsed ?? {}));
 export default sequelize;

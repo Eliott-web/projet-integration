@@ -1,0 +1,136 @@
+/* On réutilise la mise en page de la page Température */
+.page {
+    composes: page from "../temperature/temperature.module.css";
+}
+
+.shell {
+    composes: shell from "../temperature/temperature.module.css";
+}
+
+.headingRow {
+    composes: headingRow from "../temperature/temperature.module.css";
+}
+
+.eyebrow {
+    composes: eyebrow from "../temperature/temperature.module.css";
+}
+
+.subtitle {
+    composes: subtitle from "../temperature/temperature.module.css";
+}
+
+.refreshButton {
+    composes: refreshButton from "../temperature/temperature.module.css";
+}
+
+.footer {
+    composes: footer from "../temperature/temperature.module.css";
+}
+
+.errorMessage {
+    composes: errorMessage from "../temperature/temperature.module.css";
+}
+
+/* Spécifique à la page Plantes */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 24px 0 16px;
+}
+
+.searchInput {
+    flex: 1;
+    max-width: 360px;
+    padding: 10px 14px;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+}
+
+.searchInput:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.count {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.listSection {
+    margin-bottom: 32px;
+}
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+.itemMain {
+    min-width: 0;
+}
+
+.itemName {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+}
+
+.itemDescription {
+    margin: 0;
+    max-width: 60ch;
+    opacity: 0.75;
+    line-height: 1.5;
+}
+
+.itemMeta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+}
+
+.metaLabel {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.emptyState {
+    padding: 48px 16px;
+    text-align: center;
+    opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchInput {
+        max-width: none;
+    }
+
+    .item {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .itemMeta {
+        align-items: flex-start;
+    }
+}
