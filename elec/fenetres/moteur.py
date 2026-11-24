@@ -1,46 +1,44 @@
 import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
 
-# moteur
-servoPIN = 18
-p = None
-
+# moteurs : (pin, angle_open, angle_close)
+SERVOS = [
+  (18, 180, 100),
+  (12, 0, 80),    # angles inversés par rapport au moteur 18
+]
+pwms = []
 
 def angle_to_percent(angle):
   start = 2.5
   end = 12.5
   ratio = (end - start) / 180
-
   return start + angle * ratio
 
-
 def start():
-  global p
   GPIO.setmode(GPIO.BCM)
-  GPIO.setup(servoPIN, GPIO.OUT)
-  p = GPIO.PWM(servoPIN, 50) # 50Hz -> 20ms
-  p.start(angle_to_percent(100))
-
+  for pin, angle_open, angle_close in SERVOS:
+    GPIO.setup(pin, GPIO.OUT)
+    p = GPIO.PWM(pin, 50)  # 50Hz -> 20ms
+    p.start(angle_to_percent(angle_close))
+    pwms.append(p)
 
 def stop():
-  global p
-  if p is not None:
+  for p in pwms:
     p.stop()
-    p = None
+  pwms.clear()
   GPIO.cleanup()
 
-
 def open():
-  if p is None:
-    raise RuntimeError("Le moteur n'est pas démarré")
-  p.ChangeDutyCycle(angle_to_percent(180))
-
+  if not pwms:
+    raise RuntimeError("Les moteurs ne sont pas démarrés")
+  for p, (pin, angle_open, angle_close) in zip(pwms, SERVOS):
+    p.ChangeDutyCycle(angle_to_percent(angle_open))
 
 def close():
-  if p is None:
-    raise RuntimeError("Le moteur n'est pas démarré")
-  p.ChangeDutyCycle(angle_to_percent(100))
-
+  if not pwms:
+    raise RuntimeError("Les moteurs ne sont pas démarrés")
+  for p, (pin, angle_open, angle_close) in zip(pwms, SERVOS):
+    p.ChangeDutyCycle(angle_to_percent(angle_close))
 
 # MQTT
 BROKER = "localhost"
@@ -49,12 +47,10 @@ USERNAME = "fenetre"
 PASSWORD = "1234"
 TOPIC = "projet/serre/fenetre"
 
-
 def on_connect(client, userdata, flags, reason_code, properties):
-  print(f"Connecttion avec code {reason_code}")
+  print(f"Connexion avec code {reason_code}")
   client.subscribe(TOPIC)
   print("abonnement au topic reussi")
-
 
 def on_message(client, userdata, msg):
   commande = msg.payload.decode("utf-8")
@@ -65,7 +61,6 @@ def on_message(client, userdata, msg):
     close()
   else:
     print("ERREUR pas la bonne commande")
-
 
 def run():
   mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
