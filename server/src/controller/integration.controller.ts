@@ -109,3 +109,73 @@ export const getPlantes = async (_req: Request, res: Response) => {
         res.status(500).json({ error: 'Impossible de récupérer les plantes' });
     }
 };
+export async function createPlante(request: Request, response: Response): Promise<void> {
+    const body: unknown = request.body;
+    if (typeof body !== "object" || body === null) {
+        response.status(400).json({ error: "Les données de la plante sont invalides." });
+        return;
+    }
+
+    const { nom, description, date } = body as Record<string, unknown>;
+
+    if (typeof nom !== "string" || nom.trim() === "" || nom.trim().length > 255) {
+        response.status(400).json({ error: "Le nom est obligatoire (255 caractères maximum)." });
+        return;
+    }
+
+    if (description !== undefined && description !== null && (typeof description !== "string" || description.length > 255)) {
+        response.status(400).json({ error: "La description est invalide (255 caractères maximum)." });
+        return;
+    }
+
+    const parsedDate = typeof date === "string" ? new Date(date) : null;
+    if (!parsedDate || Number.isNaN(parsedDate.getTime())) {
+        response.status(400).json({ error: "La date est invalide." });
+        return;
+    }
+
+    try {
+        const plante = await Plante.create({
+            nom: nom.trim(),
+            description: typeof description === "string" && description.trim() !== "" ? description.trim() : null,
+            date: parsedDate,
+        });
+        response.status(201).json(plante);
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("Impossible d'ajouter la plante :", message);
+        response.status(500).json({ error: "Impossible d'ajouter la plante." });
+    }
+}
+export async function deletePlante(request: Request, response: Response): Promise<void> {
+    const id = Number(request.params.id);
+
+    // Vérification de l'identifiant
+    if (!Number.isSafeInteger(id) || id < 1) {
+        response.status(400).json({ error: "L'identifiant de la plante est invalide." });
+        return;
+    }
+
+    try {
+        // Suppression de la plante dans la base de données
+        const deleted = await Plante.destroy({
+            where: { IdPlante: id }
+        });
+
+        // Vérification qu'une plante a bien été supprimée
+        if (deleted === 0) {
+            response.status(404).json({ error: "Cette plante n'existe pas." });
+            return;
+        }
+
+        response.status(204).end();
+
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("Impossible de supprimer la plante :", message);
+
+        response.status(500).json({
+            error: "Impossible de supprimer la plante."
+        });
+    }
+}
