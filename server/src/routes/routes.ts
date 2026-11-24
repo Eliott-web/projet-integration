@@ -3,10 +3,12 @@ import {
     getHumidity,
     getNotifications,
     getTemperature,
+    getWindowAutomation,
     getWindowCommand,
     removeAllWindowNotifications,
     removeWindowNotification,
     setWindowCommand,
+    updateWindowAutomation,
 } from "../controller/integration.controller.js";
 
 const router = Router();
@@ -20,6 +22,8 @@ router.get("/api/humidite", getHumidity);
 router.get("/api/temperature", getTemperature);
 router.get("/api/fenetre", getWindowCommand);
 router.post("/api/fenetre", setWindowCommand);
+router.get("/api/fenetre/automatisation", getWindowAutomation);
+router.put("/api/fenetre/automatisation", updateWindowAutomation);
 router.get("/api/notifications", getNotifications);
 router.delete("/api/notifications", removeAllWindowNotifications);
 router.delete("/api/notifications/:id", removeWindowNotification);

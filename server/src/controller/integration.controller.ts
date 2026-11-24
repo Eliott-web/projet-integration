@@ -11,6 +11,30 @@ import {
     deleteWindowNotification,
     getWindowNotifications,
 } from "../services/windowNotifications.js";
+import {
+    getWindowAutomationSettings,
+    isWindowAutomationSettings,
+    saveWindowAutomationSettings,
+} from "../services/windowAutomation.js";
+
+export function getWindowAutomation(_request: Request, response: Response): void {
+    response.json(getWindowAutomationSettings());
+}
+
+export async function updateWindowAutomation(request: Request, response: Response): Promise<void> {
+    if (!isWindowAutomationSettings(request.body)) {
+        response.status(400).json({ error: "Les réglages d’automatisation de la fenêtre sont invalides." });
+        return;
+    }
+
+    try {
+        response.json(await saveWindowAutomationSettings(request.body));
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("Impossible d’enregistrer les réglages de l’automatisation fenêtre :", message);
+        response.status(500).json({ error: "Impossible d’enregistrer les réglages de l’automatisation." });
+    }
+}
 
 async function getSensorReading(kind: SensorKind, response: Response): Promise<void> {
     try {
