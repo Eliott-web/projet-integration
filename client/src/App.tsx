@@ -3,7 +3,6 @@ import Temperature from '../pages/temperature/temperature'
 import Humidite from '../pages/humidite/humidite'
 import Fenetre from '../pages/fenetre/fenetre'
 import Dashboard from '../pages/dashboard/dashboard'
-import Luminosite from '../pages/luminosite/luminosite'
 import Control from '../pages/control/control'
 import Notification from '../pages/notification/notification'
 import WindowNotifications from '../pages/notification/window-notifications'
@@ -20,7 +19,6 @@ function App() {
         <Route path="/temperature" element={<Temperature />} />
         <Route path="/humidite" element={<Humidite />} />
         <Route path="/fenetre" element={<Fenetre />} />
-        <Route path="/luminosite" element={<Luminosite />} />
         <Route path="/control" element={<Control />} />
         <Route path="/notification" element={<Notification />} />
         <Route path="/pompe" element={<Pompe />} />

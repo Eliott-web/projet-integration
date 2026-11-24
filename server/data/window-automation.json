@@ -1,5 +1,5 @@
 {
-  "enabled": false,
+  "enabled": true,
   "temperatureLow": 15,
   "temperatureHigh": 25,
   "humidityLow": 80,

@@ -10,7 +10,7 @@ import {
     setWindowCommand,
     getPlantes,
     createPlante,
-    deletePlante
+    deletePlante,
     setWindowAutomationEnabled,
     updateWindowAutomation,
 } from "../controller/integration.controller.js";
