@@ -8,6 +8,7 @@ import {
     removeAllWindowNotifications,
     removeWindowNotification,
     setWindowCommand,
+    setWindowAutomationEnabled,
     updateWindowAutomation,
 } from "../controller/integration.controller.js";
 
@@ -23,6 +24,7 @@ router.get("/api/temperature", getTemperature);
 router.get("/api/fenetre", getWindowCommand);
 router.post("/api/fenetre", setWindowCommand);
 router.get("/api/fenetre/automatisation", getWindowAutomation);
+router.patch("/api/fenetre/automatisation", setWindowAutomationEnabled);
 router.put("/api/fenetre/automatisation", updateWindowAutomation);
 router.get("/api/notifications", getNotifications);
 router.delete("/api/notifications", removeAllWindowNotifications);

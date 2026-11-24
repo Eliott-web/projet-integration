@@ -21,6 +21,30 @@ export function getWindowAutomation(_request: Request, response: Response): void
     response.json(getWindowAutomationSettings());
 }
 
+export async function setWindowAutomationEnabled(request: Request, response: Response): Promise<void> {
+    const body: unknown = request.body;
+    const enabled =
+        typeof body === "object" && body !== null && "enabled" in body
+            ? body.enabled
+            : undefined;
+
+    if (typeof enabled !== "boolean") {
+        response.status(400).json({ error: "Le réglage 'enabled' doit être un booléen." });
+        return;
+    }
+
+    try {
+        response.json(await saveWindowAutomationSettings({
+            ...getWindowAutomationSettings(),
+            enabled,
+        }));
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("Impossible de modifier l’activation de l’automatisation fenêtre :", message);
+        response.status(500).json({ error: "Impossible de modifier l’activation de l’automatisation." });
+    }
+}
+
 export async function updateWindowAutomation(request: Request, response: Response): Promise<void> {
     if (!isWindowAutomationSettings(request.body)) {
         response.status(400).json({ error: "Les réglages d’automatisation de la fenêtre sont invalides." });

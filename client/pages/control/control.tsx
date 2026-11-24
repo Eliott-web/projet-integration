@@ -106,6 +106,34 @@ function Control() {
         }
     }
 
+    async function setAutomationEnabled(enabled: boolean) {
+        if (!settings) return;
+
+        const previousEnabled = settings.enabled;
+        setSettings({ ...settings, enabled });
+        setSaving(true);
+        setError("");
+        setSaved(false);
+        try {
+            const response = await fetch(`${apiBaseUrl}/api/fenetre/automatisation`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ enabled }),
+            });
+            if (!response.ok) throw new Error(await getErrorMessage(response));
+            const result: unknown = await response.json();
+            if (!isWindowAutomationSettings(result)) {
+                throw new Error("La configuration enregistrée par le serveur est invalide.");
+            }
+            setSettings((current) => current ? { ...current, enabled: result.enabled } : current);
+        } catch (toggleError) {
+            setSettings((current) => current ? { ...current, enabled: previousEnabled } : current);
+            setError(toggleError instanceof Error ? toggleError.message : String(toggleError));
+        } finally {
+            setSaving(false);
+        }
+    }
+
     return (
         <div className={style.page}>
             <div className={style.shell}>
@@ -158,17 +186,6 @@ function Control() {
                                 </div>
                                 <span className={style.equipmentState}>AUTOMATISATION</span>
                             </div>
-                            <p className={style.panelText}>
-                                Personnalisez les seuils et les horaires utilisés par l’automatisation.
-                            </p>
-                            <div className={style.controls}>
-                                <button className={style.controlButton} type="button" disabled>
-                                    Ouvrir
-                                </button>
-                                <button className={`${style.controlButton} ${style.controlButtonSecondary}`} type="button" disabled>
-                                    Fermer
-                                </button>
-                            </div>
                             <form className={automationStyle.settingsForm} onSubmit={saveSettings}>
                                 <div className={automationStyle.formHeading}>
                                     <div>
@@ -179,12 +196,10 @@ function Control() {
                                         <input
                                             type="checkbox"
                                             checked={settings?.enabled ?? false}
-                                            disabled={loading || !settings}
+                                            disabled={loading || saving || !settings}
                                             onChange={(event) => {
-                                                setSettings((current) => current
-                                                    ? { ...current, enabled: event.currentTarget.checked }
-                                                    : current);
-                                                setSaved(false);
+                                                const enabled = event.currentTarget.checked;
+                                                void setAutomationEnabled(enabled);
                                             }}
                                         />
                                         <span>Activer</span>
