@@ -1,0 +1,9 @@
+{
+  "enabled": false,
+  "temperatureLow": 15,
+  "temperatureHigh": 25,
+  "humidityLow": 80,
+  "humidityHigh": 100,
+  "openAt": "18:00",
+  "closeAt": "08:00"
+}

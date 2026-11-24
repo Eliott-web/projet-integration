@@ -12,6 +12,54 @@ import {
     getWindowNotifications,
 } from "../services/windowNotifications.js";
 import Plante from '../tables/plante.js';
+import {
+    getWindowAutomationSettings,
+    isWindowAutomationSettings,
+    saveWindowAutomationSettings,
+} from "../services/windowAutomation.js";
+
+export function getWindowAutomation(_request: Request, response: Response): void {
+    response.json(getWindowAutomationSettings());
+}
+
+export async function setWindowAutomationEnabled(request: Request, response: Response): Promise<void> {
+    const body: unknown = request.body;
+    const enabled =
+        typeof body === "object" && body !== null && "enabled" in body
+            ? body.enabled
+            : undefined;
+
+    if (typeof enabled !== "boolean") {
+        response.status(400).json({ error: "Le réglage 'enabled' doit être un booléen." });
+        return;
+    }
+
+    try {
+        response.json(await saveWindowAutomationSettings({
+            ...getWindowAutomationSettings(),
+            enabled,
+        }));
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("Impossible de modifier l’activation de l’automatisation fenêtre :", message);
+        response.status(500).json({ error: "Impossible de modifier l’activation de l’automatisation." });
+    }
+}
+
+export async function updateWindowAutomation(request: Request, response: Response): Promise<void> {
+    if (!isWindowAutomationSettings(request.body)) {
+        response.status(400).json({ error: "Les réglages d’automatisation de la fenêtre sont invalides." });
+        return;
+    }
+
+    try {
+        response.json(await saveWindowAutomationSettings(request.body));
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.error("Impossible d’enregistrer les réglages de l’automatisation fenêtre :", message);
+        response.status(500).json({ error: "Impossible d’enregistrer les réglages de l’automatisation." });
+    }
+}
 
 async function getSensorReading(kind: SensorKind, response: Response): Promise<void> {
     try {
