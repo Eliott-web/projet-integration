@@ -3,10 +3,16 @@ import {
     getHumidity,
     getNotifications,
     getTemperature,
+    getWindowAutomation,
     getWindowCommand,
     removeAllWindowNotifications,
     removeWindowNotification,
     setWindowCommand,
+    getPlantes,
+    createPlante,
+    deletePlante,
+    setWindowAutomationEnabled,
+    updateWindowAutomation,
 } from "../controller/integration.controller.js";
 
 const router = Router();
@@ -20,8 +26,14 @@ router.get("/api/humidite", getHumidity);
 router.get("/api/temperature", getTemperature);
 router.get("/api/fenetre", getWindowCommand);
 router.post("/api/fenetre", setWindowCommand);
+router.get("/api/fenetre/automatisation", getWindowAutomation);
+router.patch("/api/fenetre/automatisation", setWindowAutomationEnabled);
+router.put("/api/fenetre/automatisation", updateWindowAutomation);
 router.get("/api/notifications", getNotifications);
 router.delete("/api/notifications", removeAllWindowNotifications);
 router.delete("/api/notifications/:id", removeWindowNotification);
+router.get("/api/plantes", getPlantes);
+router.post("/api/plantes", createPlante);
+router.delete("/api/plantes/:id", deletePlante);
 
 export default router;

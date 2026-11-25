@@ -1,0 +1,220 @@
+/* On réutilise la mise en page de la page Température */
+.page {
+    composes: page from "../temperature/temperature.module.css";
+}
+
+.shell {
+    composes: shell from "../temperature/temperature.module.css";
+}
+
+.headingRow {
+    composes: headingRow from "../temperature/temperature.module.css";
+}
+
+.eyebrow {
+    composes: eyebrow from "../temperature/temperature.module.css";
+}
+
+.subtitle {
+    composes: subtitle from "../temperature/temperature.module.css";
+}
+
+.refreshButton {
+    composes: refreshButton from "../temperature/temperature.module.css";
+}
+
+.footer {
+    composes: footer from "../temperature/temperature.module.css";
+}
+
+.errorMessage {
+    composes: errorMessage from "../temperature/temperature.module.css";
+}
+
+/* Spécifique à la page Plantes */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 24px 0 16px;
+}
+
+.searchInput {
+    flex: 1;
+    max-width: 360px;
+    padding: 10px 14px;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+}
+
+.searchInput:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.count {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.listSection {
+    margin-bottom: 32px;
+}
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+}
+
+.itemMain {
+    min-width: 0;
+}
+
+.itemName {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+    font-weight: 700;
+        color: #263f32;
+}
+.itemDescription {
+    margin: 0;
+    max-width: 60ch;
+    opacity: 0.75;
+    line-height: 1.5;
+}
+
+.itemMeta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+}
+
+.metaLabel {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.emptyState {
+    padding: 48px 16px;
+    text-align: center;
+    opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchInput {
+        max-width: none;
+    }
+
+    .item {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .itemMeta {
+        align-items: flex-start;
+    }
+}
+/* Formulaire d'ajout */
+.form {
+    margin: 24px 0;
+    padding: 20px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 12px;
+}
+
+.formTitle {
+    margin: 0 0 16px;
+    font-size: 1.1rem;
+}
+
+.formFields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+}
+
+.fieldWide {
+    grid-column: 1 / -1;
+}
+
+.field input {
+    padding: 10px 14px;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+}
+
+.field input:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.formError {
+    margin: 0 0 12px;
+    color: #c0392b;
+}
+
+.form button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .formFields {
+        grid-template-columns: 1fr;
+    }
+}
+
+.deleteButton {
+    margin-top: 10px;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 0.85rem;
+    color: #c0392b;
+    background: transparent;
+    border: 1px solid #c0392b;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.deleteButton:hover:not(:disabled) {
+    background: #c0392b;
+    color: white;
+}
+
+.deleteButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

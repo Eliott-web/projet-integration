@@ -10,6 +10,7 @@ type SensorReading = {
 
 type SensorState = "loading" | "online" | "waiting" | "offline" | "unavailable";
 type WindowCommand = "open" | "close";
+type AutomationState = "loading" | "enabled" | "disabled" | "unavailable";
 
 const apiBaseUrl = import.meta.env.VITE_API_URL ?? `http://${window.location.hostname}:3000`;
 
@@ -67,6 +68,8 @@ function Dashboard() {
     const [temperatureState, setTemperatureState] = useState<SensorState>("loading");
     const [windowCommand, setWindowCommand] = useState<WindowCommand>("close");
     const [brokerConnected, setBrokerConnected] = useState(false);
+    const [automationState, setAutomationState] = useState<AutomationState>("loading");
+    const [currentTime, setCurrentTime] = useState(() => new Date());
 
     useEffect(() => {
         let active = true;
@@ -124,15 +127,42 @@ function Dashboard() {
             }
         };
 
+        const refreshAutomationState = async () => {
+            try {
+                const response = await fetch(`${apiBaseUrl}/api/fenetre/automatisation`, {
+                    headers: { Accept: "application/json" },
+                });
+                if (!response.ok) throw new Error(`Réponse HTTP ${response.status}`);
+
+                const payload: unknown = await response.json();
+                if (
+                    typeof payload !== "object" ||
+                    payload === null ||
+                    !("enabled" in payload) ||
+                    typeof payload.enabled !== "boolean"
+                ) {
+                    throw new Error("Le statut d’automatisation reçu est invalide.");
+                }
+
+                if (active) setAutomationState(payload.enabled ? "enabled" : "disabled");
+            } catch (error) {
+                console.error("Impossible de récupérer le statut de l’automatisation fenêtre :", error);
+                if (active) setAutomationState("unavailable");
+            }
+        };
+
         void refreshReadings();
         void refreshWindowCommand();
+        void refreshAutomationState();
         const intervalId = window.setInterval(() => void refreshReadings(), 5000);
         const windowIntervalId = window.setInterval(() => void refreshWindowCommand(), 5000);
+        const automationIntervalId = window.setInterval(() => void refreshAutomationState(), 5000);
 
         return () => {
             active = false;
             window.clearInterval(intervalId);
             window.clearInterval(windowIntervalId);
+            window.clearInterval(automationIntervalId);
         };
     }, []);
 
@@ -282,13 +312,43 @@ function Dashboard() {
                         <article className={style.summaryCard}>
                             <div className={style.cardHeader}>
                                 <span className={style.iconControl} aria-hidden="true">⚙</span>
-                                <span className={`${style.statusPill} ${style.pillUnavailable}`}>DÉSACTIVÉ</span>
+                                <span className={`${style.statusPill} ${
+                                    automationState === "enabled"
+                                        ? style.pillOnline
+                                        : automationState === "disabled"
+                                          ? style.pillUnavailable
+                                          : automationState === "loading"
+                                            ? style.pillWaiting
+                                            : style.pillOffline
+                                }`}>
+                                    {automationState === "enabled"
+                                        ? "ACTIVÉ"
+                                        : automationState === "disabled"
+                                          ? "DÉSACTIVÉ"
+                                          : automationState === "loading"
+                                            ? "CHARGEMENT"
+                                            : "INDISPONIBLE"}
+                                </span>
                             </div>
                             <p className={style.cardLabel}>CONTRÔLE</p>
-                            <p className={style.windowState}>Mode manuel inactif</p>
-                            <p className={style.cardFootnote}>Aucune commande ne peut être envoyée</p>
+                            <p className={style.windowState}>
+                                {automationState === "enabled"
+                                    ? "Automatisations actives"
+                                    : automationState === "disabled"
+                                      ? "Automatisations désactivées"
+                                      : automationState === "loading"
+                                        ? "Chargement du statut…"
+                                        : "Statut indisponible"}
+                            </p>
+                            <p className={style.cardFootnote}>
+                                {automationState === "enabled"
+                                    ? "Les seuils et horaires pilotent la fenêtre"
+                                    : automationState === "disabled"
+                                      ? "Aucune commande automatique ne sera envoyée"
+                                      : "Statut récupéré depuis le serveur"}
+                            </p>
                             <Link className={style.cardLink} to="/control">
-                                Voir les équipements <span aria-hidden="true">→</span>
+                                Voir les réglages <span aria-hidden="true">→</span>
                             </Link>
                         </article>
 
