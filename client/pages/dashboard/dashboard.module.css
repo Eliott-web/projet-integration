@@ -2,6 +2,7 @@
     --ink: #153a32;
     --muted: #647a70;
     --line: #d7e5dd;
+    position: relative;
     min-height: 100vh;
     color: var(--ink);
     text-align: left;
@@ -22,19 +23,9 @@
 }
 
 .shell {
-    width: min(1120px, 100% - 64px);
-    margin: 0 auto;
+    width: min(1120px, calc(100% - 314px));
+    margin: 0 auto 0 max(282px, calc(50% - 435px));
     padding-bottom: 24px;
-}
-
-.clock {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 10px;
-    color: #647a70;
-    font-size: 13px;
-    font-variant-numeric: tabular-nums;
-    font-weight: 700;
 }
 
 .topbar {
@@ -108,7 +99,7 @@
     align-items: end;
     justify-content: space-between;
     gap: 20px;
-    padding: 44px 0 28px;
+    padding: 32px 0 24px;
 }
 
 .eyebrow,
@@ -464,6 +455,14 @@
         align-items: flex-start;
         flex-direction: column;
     }
+}
+
+@media (max-width: 900px) {
+    .shell {
+        width: calc(100% - 64px);
+        margin: 0 auto;
+    }
+
 }
 
 @media (max-width: 560px) {

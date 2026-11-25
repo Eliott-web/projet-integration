@@ -67,7 +67,6 @@ function Dashboard() {
     const [temperatureState, setTemperatureState] = useState<SensorState>("loading");
     const [windowCommand, setWindowCommand] = useState<WindowCommand>("close");
     const [brokerConnected, setBrokerConnected] = useState(false);
-    const [currentTime, setCurrentTime] = useState(() => new Date());
 
     useEffect(() => {
         let active = true;
@@ -137,11 +136,6 @@ function Dashboard() {
         };
     }, []);
 
-    useEffect(() => {
-        const clockIntervalId = window.setInterval(() => setCurrentTime(new Date()), 1000);
-        return () => window.clearInterval(clockIntervalId);
-    }, []);
-
     const sensorStatus: Record<SensorState, string> = {
         loading: "Connexion...",
         online: "Capteur actif",
@@ -163,14 +157,6 @@ function Dashboard() {
         <div className={style.page}>
             <div className={style.shell}>
                 <Header />
-                <div className={style.clock}>
-                    <time dateTime={currentTime.toISOString()}>
-                        {new Intl.DateTimeFormat("fr-BE", {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }).format(currentTime)}
-                    </time>
-                </div>
 
                 <main>
                     <section className={style.heading}>

@@ -2,12 +2,14 @@
     --ink: #153a32;
     --muted: #647a70;
     --line: #d7e5dd;
+    position: relative;
     min-height: 100vh;
     color: var(--ink);
     text-align: left;
     letter-spacing: 0;
-    background-color: #edf5f0;
-    background-image: linear-gradient(120deg, rgba(255, 255, 255, 0.72), rgba(235, 246, 239, 0.82));
+    background:
+        radial-gradient(ellipse at 92% 6%, rgba(196, 224, 204, 0.45), transparent 34%),
+        linear-gradient(120deg, #f8fbf8, #edf5f0);
     font-family: "Avenir Next", "Trebuchet MS", sans-serif;
 }
 
@@ -20,9 +22,16 @@
 }
 
 .shell {
-    width: min(1120px, 100% - 64px);
-    margin: 0 auto;
+    width: min(1120px, calc(100% - 314px));
+    margin: 0 auto 0 max(282px, calc(50% - 435px));
     padding: 0 0 30px;
+}
+
+@media (max-width: 900px) {
+    .shell {
+        width: calc(100% - 64px);
+        margin: 0 auto;
+    }
 }
 
 .topbar {
@@ -125,7 +134,35 @@
 }
 
 .headingRow {
-    padding: 44px 0 24px;
+    position: relative;
+    overflow: hidden;
+    align-items: center;
+    min-height: 122px;
+    margin: 24px 0 22px;
+    padding: 26px 32px;
+    border: 1px solid #eadfc9;
+    border-radius: 20px;
+    background: linear-gradient(115deg, rgba(249, 239, 218, 0.94), rgba(255, 255, 255, 0.94));
+    box-shadow: 0 14px 36px rgba(93, 73, 38, 0.07);
+}
+
+.headingRow::after {
+    position: absolute;
+    top: -150px;
+    right: -56px;
+    width: 310px;
+    height: 310px;
+    border: 1px solid rgba(171, 126, 52, 0.13);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(239, 212, 158, 0.46), rgba(239, 212, 158, 0) 68%);
+    content: "";
+    pointer-events: none;
+}
+
+.headingRow > div,
+.headingRow > button {
+    position: relative;
+    z-index: 1;
 }
 
 .eyebrow,
@@ -146,8 +183,9 @@
 }
 
 .headingRow h1 {
-    font-size: clamp(32px, 5vw, 44px);
+    font-size: clamp(34px, 4.2vw, 44px);
     line-height: 1.1;
+    letter-spacing: -1.2px;
 }
 
 .subtitle {
@@ -157,9 +195,10 @@
 }
 
 .refreshButton {
-    padding: 10px 15px;
+    min-height: 42px;
+    padding: 0 15px;
     border: 1px solid #c8dacf;
-    border-radius: 7px;
+    border-radius: 9px;
     color: #17684d;
     background: #fff;
     font: inherit;
@@ -172,30 +211,38 @@
     background: #f3faf5;
 }
 
+.refreshButton:active {
+    transform: translateY(1px);
+}
+
 .readingGrid {
     display: grid;
     grid-template-columns: minmax(0, 1.7fr) minmax(220px, 1fr);
-    gap: 16px;
+    gap: 18px;
 }
 
 .currentReading,
 .statusPanel,
 .historySection {
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 16px;
     background: rgba(255, 255, 255, 0.82);
-    box-shadow: 0 12px 30px rgba(34, 79, 58, 0.045);
+    box-shadow: 0 14px 36px rgba(34, 79, 58, 0.06);
 }
 
 .currentReading {
     padding: 25px 28px 20px;
+    border-color: rgba(255, 255, 255, 0.16);
+    color: #effaf3;
+    background: linear-gradient(125deg, #174d3d, #123a35 70%, #163b42);
+    box-shadow: 0 16px 38px rgba(21, 58, 50, 0.14);
 }
 
 .readingTopline {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: #779087;
+    color: #b7d3c4;
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 1px;
@@ -205,7 +252,7 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    color: #526d61;
+    color: #d7eee0;
     letter-spacing: 0.5px;
 }
 
@@ -216,7 +263,7 @@
 
 .metric {
     margin: 14px 0 20px;
-    color: #153a32;
+    color: #fff;
     font-size: clamp(64px, 10vw, 96px);
     font-weight: 700;
     letter-spacing: -5px;
@@ -225,7 +272,7 @@
 
 .metric span {
     margin-left: 8px;
-    color: #779087;
+    color: #a9d8bd;
     font-size: 27px;
     font-weight: 600;
     letter-spacing: 0;
@@ -235,14 +282,14 @@
     height: 10px;
     overflow: hidden;
     border-radius: 99px;
-    background: #e7efe9;
+    background: rgba(224, 245, 231, 0.18);
 }
 
 .meter span {
     display: block;
     height: 100%;
     border-radius: inherit;
-    background: linear-gradient(90deg, #55ac79, #e4a449);
+    background: linear-gradient(90deg, #79d6a8, #d2e995);
     transition: width 250ms ease;
 }
 
@@ -250,13 +297,13 @@
     display: flex;
     justify-content: space-between;
     margin-top: 7px;
-    color: #8a9b91;
+    color: #a8c6b6;
     font-size: 11px;
 }
 
 .receivedAt {
     margin-top: 19px;
-    color: var(--muted);
+    color: #c1d9cb;
     font-size: 12px;
 }
 
@@ -406,7 +453,11 @@
     }
 
     .headingRow {
-        padding-top: 30px;
+        align-items: flex-start;
+        flex-direction: column;
+        min-height: auto;
+        margin: 20px 0 18px;
+        padding: 22px;
     }
 
     .readingGrid {

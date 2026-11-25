@@ -2,12 +2,14 @@
     --ink: #153a32;
     --muted: #647a70;
     --line: #d7e5dd;
+    position: relative;
     min-height: 100vh;
     color: var(--ink);
     text-align: left;
     letter-spacing: 0;
-    background-color: #edf5f0;
-    background-image: linear-gradient(120deg, rgba(255, 255, 255, 0.72), rgba(235, 246, 239, 0.82));
+    background:
+        radial-gradient(ellipse at 92% 6%, rgba(196, 224, 204, 0.45), transparent 34%),
+        linear-gradient(120deg, #f8fbf8, #edf5f0);
     font-family: "Avenir Next", "Trebuchet MS", sans-serif;
 }
 
@@ -20,9 +22,16 @@
 }
 
 .shell {
-    width: min(1120px, 100% - 64px);
-    margin: 0 auto;
+    width: min(1120px, calc(100% - 314px));
+    margin: 0 auto 0 max(282px, calc(50% - 435px));
     padding: 0 0 30px;
+}
+
+@media (max-width: 900px) {
+    .shell {
+        width: calc(100% - 64px);
+        margin: 0 auto;
+    }
 }
 
 .topbar {
@@ -79,7 +88,33 @@
 }
 
 .headingRow {
-    padding: 44px 0 28px;
+    position: relative;
+    overflow: hidden;
+    min-height: 122px;
+    margin: 24px 0 22px;
+    padding: 26px 32px;
+    border: 1px solid #d5e4db;
+    border-radius: 20px;
+    background: linear-gradient(115deg, rgba(222, 240, 227, 0.96), rgba(255, 255, 255, 0.92));
+    box-shadow: 0 14px 36px rgba(34, 79, 58, 0.06);
+}
+
+.headingRow::after {
+    position: absolute;
+    top: -150px;
+    right: -56px;
+    width: 310px;
+    height: 310px;
+    border: 1px solid rgba(75, 139, 103, 0.12);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196, 224, 204, 0.46), rgba(196, 224, 204, 0) 68%);
+    content: "";
+    pointer-events: none;
+}
+
+.headingRow > div {
+    position: relative;
+    z-index: 1;
 }
 
 .eyebrow,
@@ -95,10 +130,10 @@
     margin: 0;
     color: var(--ink);
     font-family: inherit;
-    font-size: 38px;
+    font-size: clamp(34px, 4.2vw, 44px);
     font-weight: 700;
     line-height: 1.12;
-    letter-spacing: 0;
+    letter-spacing: -1.2px;
 }
 
 .subtitle {
@@ -110,15 +145,16 @@
 .controlGrid {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
-    gap: 14px;
+    gap: 18px;
 }
 
 .windowPanel,
 .commandsPanel,
 .infoSection {
     border: 1px solid #d5e4db;
-    border-radius: 7px;
+    border-radius: 16px;
     background: rgba(255, 255, 255, 0.84);
+    box-shadow: 0 14px 36px rgba(34, 79, 58, 0.06);
 }
 
 .windowPanel {
@@ -160,7 +196,7 @@
     place-items: center;
     margin-top: 10px;
     overflow: hidden;
-    border-radius: 5px;
+    border-radius: 12px;
     background: linear-gradient(180deg, #eaf5ee 0%, #d7eadd 100%);
 }
 
@@ -173,7 +209,7 @@
     gap: 7px;
     padding: 10px;
     border: 8px solid #39745d;
-    border-radius: 3px;
+    border-radius: 7px;
     background: #f7fbf8;
     box-shadow: 0 9px 18px rgba(21, 58, 50, 0.12);
 }
@@ -233,7 +269,7 @@
 .closeButton {
     min-height: 43px;
     border: 0;
-    border-radius: 5px;
+    border-radius: 9px;
     color: #fff;
     font: inherit;
     font-size: 12px;
@@ -252,6 +288,23 @@
 .closeButton:disabled {
     cursor: not-allowed;
     opacity: 0.55;
+}
+
+.openButton:not(:disabled),
+.closeButton:not(:disabled) {
+    transition: filter 150ms ease, transform 150ms ease;
+}
+
+.openButton:not(:disabled):hover,
+.closeButton:not(:disabled):hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+}
+
+.openButton:focus-visible,
+.closeButton:focus-visible {
+    outline: 2px solid #167459;
+    outline-offset: 3px;
 }
 
 .commandNote {
@@ -306,6 +359,13 @@
     font-weight: 700;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .openButton:not(:disabled),
+    .closeButton:not(:disabled) {
+        transition: none;
+    }
+}
+
 @media (max-width: 680px) {
     .shell {
         width: calc(100% - 36px);
@@ -321,7 +381,9 @@
     }
 
     .headingRow {
-        padding: 34px 0 22px;
+        min-height: auto;
+        margin: 20px 0 18px;
+        padding: 22px;
     }
 
     .page h1 {
